@@ -107,7 +107,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((ItemViewHolder) holder).tel_Tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Toast.makeText(context,"clicked!",Toast.LENGTH_SHORT).show();
                         int position = holder.getLayoutPosition();
                         onItemClickListener.onTelClick(((ItemViewHolder) holder).tel_Tv, position);
                     }
