@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/fileName_tv"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="文件名称"/>
+        <TextView
+            android:id="@+id/fileSize_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1.2"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:text="大小"/>
+        <TextView
+            android:id="@+id/download_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="查看"
+            android:textColor="@color/blue"
+            android:textSize="14sp" />
+    </LinearLayout>
+    <View
+        android:background="#F2F2F2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/bg_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:padding="5dip"
+            android:text="姓名："
+            android:textColor="@color/zhu_1_8"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/workcode_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:paddingBottom="5dip"
+            android:paddingLeft="5dip"
+            android:text="工号："
+            android:textColor="@color/black_33"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/unit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:paddingBottom="5dip"
+            android:paddingLeft="5dip"
+            android:text="单位："
+            android:textColor="@color/black_33"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

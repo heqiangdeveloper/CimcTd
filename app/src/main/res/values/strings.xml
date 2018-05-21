@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">管理平台</string>
+    <string-array name="isReceiveEnum">
+        <item>所有状态</item>
+        <item>已接收</item>
+        <item>未接收</item>
+    </string-array>
+    <string-array name="isSendJobsEnum">
+        <item>所有状态</item>
+        <item>已派工</item>
+        <item>未派工</item>
+    </string-array>
+</resources>

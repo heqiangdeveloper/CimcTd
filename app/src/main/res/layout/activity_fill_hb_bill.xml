@@ -1,0 +1,1442 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f2f2f2"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/back_rl"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimaryDark">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:src="@mipmap/ic_back" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="液压式登机桥定检表"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/update_ll"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/commit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/update_ll"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/back_rl"
+        android:background="#f2f2f2"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginTop="2dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="机场名称："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/custName_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:hint="请输入机场名称"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"  />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:layout_marginTop="2dip"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="定检类型："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/maintenanceType_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:hint="请选择定检类型"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:layout_marginTop="2dip"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="60dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:padding="8dip"
+                        android:text="桥号："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/bridgeNum_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入桥号"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="开始时间："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:hint="请选择开始时间"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="结束时间："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请选择结束时间"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="总天数："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="计算总天数"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="参加人员："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/fseq_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入参加人员"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="负责人："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入负责人"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="技术参数测定："
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="运动检测，动作是否准确正常，有无异常振动、噪音："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/chargeName_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入运动检测，动作是否准确正常，有无异常振动、噪音信息"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="传动机构有无异常磨损："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/otherPeople_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入传动机构有无异常磨损信息"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="检查登机桥整体防水性："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/proMaintenanceDate_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入检查登机桥整体防水性"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/province_Linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="通道伸长极限保护："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入通道伸长极限保护"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="通道收缩极限保护："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入通道收缩极限保护"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="接机保护："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入接机保护"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="速度保护："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入速度保护"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="遮蓬状态："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入遮蓬状态"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="地板调平状态："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:hint="请输入地板调平状态"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="自动调平工作状态："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入自动调平工作状态"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="结构检查："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入结构检查"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="轴承润滑情况："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入轴承润滑情况"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="外部表面状态："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:hint="请输入外部表面状态"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="接机口转向角度："
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="左："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入左角度"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="左限位保护："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入左限位保护"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="右："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入右角度"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="右限位保护："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入右限位保护"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp"  />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="通道转向角度："
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="左："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入左角度"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="左限位保护："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入左限位保护"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="右："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入右角度"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="右限位保护："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入右限位保护"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="固定通道"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与候机楼接点："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与候机楼接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="双固定节接点："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入双固定节接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与旋转平台接点："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与旋转平台接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="旋转平台"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与立柱接点："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与立柱接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="轴承："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与立柱接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与活动通道接点："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与立柱接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"  />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="活动通道"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="水平轮间隙："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入水平轮间隙"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="8dip"
+                        android:text="垂直轮间隙："
+                        android:textColor="@color/black_33"
+                        android:textSize="14sp" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="请输入垂直轮间隙"
+                        android:padding="8dip"
+                        android:textColor="@color/black_33"
+                        android:textColorHint="@color/alpha30"
+                        android:textSize="14sp"  />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与升降油缸接点："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与升降油缸接点"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="电机减速机润滑油情况："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入电机减速机润滑油情况"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="接机口"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与活动通道连接情况："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与活动通道连接情况"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="旋转轨道情况："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入旋转轨道情况"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="轴承："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入轴承情况"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="升降立柱"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="与油箱连接状态："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入与油箱连接状态"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="轮毂状态："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入轮毂状态"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="电气绝缘"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="相间："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入相间"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="线间："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入线间"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"  />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="液压系统"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="油样检查："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入油样检查"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="液压油检查："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入液压油检查"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="油漏情况："
+                    android:textColor="@color/black_33"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="请输入油漏情况"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <View
+                android:layout_marginTop="5dip"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
