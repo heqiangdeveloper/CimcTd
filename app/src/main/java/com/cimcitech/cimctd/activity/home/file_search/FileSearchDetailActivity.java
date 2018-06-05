@@ -20,6 +20,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +35,8 @@ import com.cimcitech.cimctd.bean.file_search.FileSearchDetailReq;
 import com.cimcitech.cimctd.bean.file_search.FileSearchDetailVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
+import com.cimcitech.cimctd.widget.ClearEditText;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -50,13 +55,13 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class FileSearchDetailActivity extends AppCompatActivity {
+public class FileSearchDetailActivity extends MyBaseActivity {
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-    @Bind(R.id.search_et)
-    EditText search_Et;
+    @Bind(R.id.search_bar)
+    ClearEditText search_Bar;
     private FileSearchDetailAdapter adapter;
     private FileSearchDetailVo fileSearchDetailVo;
     private List<FileDetail> data = new ArrayList<FileDetail>();
@@ -97,6 +102,16 @@ public class FileSearchDetailActivity extends AppCompatActivity {
             { ".png", "image/*" },
             { ".zip", "application/x-gzip" },
             { ".rar", "application/x-gzip" },
+            { ".html", "text/html" },
+            { ".rmvb", "video/*" },
+            { ".avi", "video/*" },
+            { ".3gp", "video/*" },
+            { ".mp4", "video/*" },
+            { ".wmv", "video/*" },
+            { ".mp3", "audio/*" },
+            { ".mid", "audio/*" },
+            { ".wav", "audio/*" },
+            { ".ogg", "audio/*" },
             { "", "*/*" } };
 
     private Handler handler = new Handler() {
@@ -136,6 +151,7 @@ public class FileSearchDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         detailId = getIntent().getIntExtra("detailId",0);
         Log.d(TAG,"detailId is: " + detailId);
+        mLoading.show();
         initViewData();
         getData();
     }
@@ -287,6 +303,47 @@ public class FileSearchDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        //根据输入框输入值的改变来过滤搜索
+        search_Bar.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
+                filterData(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    /**
+     * 根据输入框中的值来过滤数据并更新RecyclerView
+     *
+     * @param filterStr
+     */
+    private void filterData(String filterStr) {
+        List<FileDetail> filterDateList = new ArrayList<>();
+
+        if (TextUtils.isEmpty(filterStr)) {
+            filterDateList = data;
+        } else {
+            filterDateList.clear();
+            for (FileDetail fileDetail : data) {
+                String name = fileDetail.getNewFileName();//文件名称
+                if (name.startsWith(filterStr.toString())){
+                    filterDateList.add(fileDetail);
+                }
+            }
+        }
+        adapter.updateList(filterDateList);
     }
 
     public boolean ifFileExist(String fileName){
@@ -437,22 +494,18 @@ public class FileSearchDetailActivity extends AppCompatActivity {
         return type;
     }
 
-    @OnClick({R.id.back,R.id.search_bt})
+    @OnClick({R.id.back})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
-                break;
-            case R.id.search_bt:
-                updateData();
-                //ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
         }
     }
 
     public void getData() {
         String json = new Gson().toJson(new FileSearchDetailReq(pageNum, 10, "",
-                new FileSearchDetailReq.filesVoBean(detailId,search_Et.getText().toString().trim())));
+                new FileSearchDetailReq.filesVoBean(detailId,"")));
         OkHttpUtils
                 .postString()
                 .url(Config.FILE_SEARCH_DETAIL_URL)
@@ -465,7 +518,7 @@ public class FileSearchDetailActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                //ToastUtil.showNetError();
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                                 if (isRefreshing) {
                                     swipeRefreshLayout.setRefreshing(false);
@@ -474,6 +527,7 @@ public class FileSearchDetailActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 Log.d(TAG,"response is: " + response);
                                 fileSearchDetailVo = GjsonUtil.parseJsonWithGson(response, FileSearchDetailVo.class);
                                 if (fileSearchDetailVo != null) {

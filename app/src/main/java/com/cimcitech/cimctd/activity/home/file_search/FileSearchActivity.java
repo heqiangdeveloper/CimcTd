@@ -1,24 +1,36 @@
 package com.cimcitech.cimctd.activity.home.file_search;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
+import com.cimcitech.cimctd.activity.home.contact.ContactActivity;
 import com.cimcitech.cimctd.adapter.file_search.FileSearchAdapter;
 import com.cimcitech.cimctd.bean.file_search.MyFile;
 import com.cimcitech.cimctd.bean.file_search.FileSearchReq;
 import com.cimcitech.cimctd.bean.file_search.FileSearchVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
+import com.cimcitech.cimctd.utils.PinyinUtils;
+import com.cimcitech.cimctd.widget.ClearEditText;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.google.gson.Gson;
+import com.jimmy.common.util.DeviceUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -31,13 +43,13 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class FileSearchActivity extends AppCompatActivity {
+public class FileSearchActivity extends MyBaseActivity {
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-    @Bind(R.id.search_et)
-    EditText search_Et;
+    @Bind(R.id.search_bar)
+    ClearEditText search_Bar;
 
     private Handler handler = new Handler();
     private FileSearchAdapter adapter;
@@ -53,6 +65,7 @@ public class FileSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_search);
         ButterKnife.bind(this);
+        mLoading.show();
         initViewData();
         getData();
     }
@@ -173,43 +186,61 @@ public class FileSearchActivity extends AppCompatActivity {
 
             }
         });
+
+        //根据输入框输入值的改变来过滤搜索
+        search_Bar.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
+                filterData(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
-    @OnClick({R.id.back,R.id.search_bt})
+    /**
+     * 根据输入框中的值来过滤数据并更新RecyclerView
+     *
+     * @param filterStr
+     */
+    private void filterData(String filterStr) {
+        List<MyFile> filterDateList = new ArrayList<>();
+
+        if (TextUtils.isEmpty(filterStr)) {
+            filterDateList = data;
+        } else {
+            filterDateList.clear();
+            for (MyFile myFile : data) {
+                String name = myFile.getMachineNum();//桥号
+                if (name.startsWith(filterStr.toString())){
+                    filterDateList.add(myFile);
+                }
+            }
+        }
+        adapter.updateList(filterDateList);
+    }
+
+    @OnClick({R.id.back})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
-                break;
-            /*case R.id.my_tv:
-                myData = true;
-                //myView.setVisibility(View.VISIBLE);
-                //xsView.setVisibility(View.INVISIBLE);
-                updateData();
-                break;*/
-            /*case R.id.xs_tv:
-                myData = false;
-                myView.setVisibility(View.INVISIBLE);
-                xsView.setVisibility(View.VISIBLE);
-                updateData();
-                break;*/
-            //case R.id.add_bt:
-                /*Intent intent = new Intent(new Intent(UsersInfoActivity.this,
-                    ContactPersonAddActivity.class));
-                if (custid > 0)
-                    intent.putExtra("custid", custid);
-                startActivity(intent);*/
-               // break;
-            case R.id.search_bt:
-                updateData();
-                //ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
         }
     }
 
     public void getData() {
         String json = new Gson().toJson(new FileSearchReq(pageNum, 10, "",
-                new FileSearchReq.SaleContDetBean(search_Et.getText().toString().trim())));
+                new FileSearchReq.SaleContDetBean("")));
         OkHttpUtils
                 .postString()
                 .url(Config.FILE_SEARCH_URL)
@@ -222,11 +253,12 @@ public class FileSearchActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                //ToastUtil.showNetError();
+                                if(mLoading.isShowing()) mLoading.dismiss();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 Log.d(TAG,"response is: " + response);
                                 fileSearchVo = GjsonUtil.parseJsonWithGson(response,FileSearchVo.class);
                                 if (fileSearchVo != null) {

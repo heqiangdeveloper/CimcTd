@@ -1,9 +1,11 @@
 package com.cimcitech.cimctd.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.cimcitech.cimctd.bean.AreaVo;
 import com.cimcitech.cimctd.bean.Loginback;
+import com.jimmy.common.bean.Schedule;
 
 /**
  * Created by cimcitech on 2017/7/31.
@@ -27,6 +29,9 @@ public class Config {
 
     public static String KEY_LOGIN_AUTO = "key_login_auto";
 
+    public static boolean isOnCreated = true;
+
+    public static Schedule scheduleConfig = null;
 
 
     public static String PUBLIC_KEY =
@@ -63,9 +68,9 @@ public class Config {
 
     //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    public static final String IP = "http://10.34.10.21:8080/tdsh";//本机
+    //public static final String IP = "http://10.34.10.21:8080/tdsh";//本机
 
-    //public static final String IP = "http://113.106.81.132:8086/tdsh";//zxq
+    public static final String IP = "http://113.106.81.132:8086/tdsh";//zxq
 
     //public static final String IP = "http://10.34.10.79:8080/tdsh";//zxq
 

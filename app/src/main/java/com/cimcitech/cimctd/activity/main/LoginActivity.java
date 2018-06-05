@@ -18,7 +18,7 @@ import com.cimcitech.cimctd.rsa.RSAUtils;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
 import com.cimcitech.cimctd.utils.ToastUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -27,9 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-import static javax.crypto.Cipher.PRIVATE_KEY;
-
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends MyBaseActivity {
 
     @Bind(R.id.user_name_tv)
     EditText userNameTv;
@@ -267,6 +265,9 @@ public class LoginActivity extends BaseActivity {
             System.out.println(name + pwd);
             userNameTv.setText(sp.getString("user_name", ""));
             passwordTv.setText(sp.getString("password", ""));
+        }else{
+            userNameTv.setText("");
+            passwordTv.setText("");
         }
     }
 

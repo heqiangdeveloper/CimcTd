@@ -1,13 +1,12 @@
 package com.cimcitech.cimctd.activity.home.faulthandle;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ShowFaultImageActivity extends BaseActivity {
+public class ShowFaultImageActivity extends MyBaseActivity {
     @Bind(R.id.approachIcon_pv)
     PhotoView approachIcon_Pv;
 

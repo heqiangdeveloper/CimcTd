@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             android:padding="10dip"
             android:text="选择客户类别"
-            android:textColor="@color/black_33"
-            android:textSize="14sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/contact_detail_label_size" />
 
         <ImageView
             android:layout_width="match_parent"

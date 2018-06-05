@@ -11,8 +11,7 @@ import com.cimcitech.cimctd.adapter.dispatch.DispatchAdapter;
 import com.cimcitech.cimctd.bean.dispatch.Dispatch;
 import com.cimcitech.cimctd.bean.dispatch.DispatchVo;
 import com.cimcitech.cimctd.utils.Config;
-import com.cimcitech.cimctd.utils.DateTool;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ import butterknife.OnClick;
  * Created by lyw on 2018/4/23.
  */
 
-public class WorkOrderActivity extends BaseActivity {
+public class WorkOrderActivity extends MyBaseActivity {
     @Bind(R.id.custName_tv)
     TextView custName_tv;
 

@@ -30,7 +30,7 @@
             android:text="故障处理办法"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/contact_detail_label_size" />
 
         <TextView
             android:id="@+id/add_tv"
@@ -46,42 +46,26 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <com.cimcitech.cimctd.widget.ClearEditText
+        android:layout_below="@id/title"
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_margin="10dip"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/search_et"
-            android:layout_width="wrap_content"
-            android:layout_height="30dip"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:hint="输入故障类型查询"
-            android:paddingLeft="10dip"
-            android:textColor="@color/black_33"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/search_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="30dip"
-            android:layout_marginLeft="10dip"
-            android:background="@color/white"
-            android:text="搜索"
-            android:textColor="@color/colorPrimaryDark" />
-    </LinearLayout>
+        android:layout_margin="5dip"
+        android:padding="10dp"
+        android:paddingLeft="8dp"
+        android:background="@color/white"
+        android:drawableLeft="@drawable/search24"
+        android:drawablePadding="10dp"
+        android:hint="输入故障类型查询"
+        android:maxLines="1"
+        android:textSize="@dimen/contact_detail_label_size" />
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/recycler_view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_bar"
+        android:layout_below="@id/search_bar"
         android:layout_marginBottom="2dip"
         android:background="@android:color/white"
         android:visibility="visible">

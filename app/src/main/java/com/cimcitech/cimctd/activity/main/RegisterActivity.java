@@ -16,13 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.bean.LoginVo;
 import com.cimcitech.cimctd.bean.RegisterVo;
 import com.cimcitech.cimctd.bean.VerificationCodeVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.utils.ToastUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.regex.Pattern;
@@ -32,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends MyBaseActivity {
 
     @Bind(R.id.user_name_tv)
     EditText userNameTv;

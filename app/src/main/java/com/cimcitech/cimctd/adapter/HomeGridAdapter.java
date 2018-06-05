@@ -43,20 +43,6 @@ public class HomeGridAdapter extends BaseAdapter {
         initAppAuth();
     }
 
-    public HomeGridAdapter(Context context) {
-        inflater = LayoutInflater.from(context);
-        //ImageLists.add(R.mipmap.v2__apps_ic__legwork);
-        //TextLists.add("用户信息");
-        ImageLists.add(R.mipmap.v2__apps_ic__workreport);
-        TextLists.add("资料查询");
-        ImageLists.add(R.mipmap.v3_crm_refund_analysis_customer);
-        TextLists.add("联系人");
-        ImageLists.add(R.mipmap.v2__apps_ic__workflow);
-        TextLists.add("派工");
-        ImageLists.add(R.mipmap.fault);
-        TextLists.add("故障处理");
-    }
-
     /*
     * 1.模块授权：在gc_user的app_auth列中授权
     *   G-门卫（车辆出厂、扫描出厂）
@@ -82,6 +68,20 @@ public class HomeGridAdapter extends BaseAdapter {
         }else{
             addModule(sa);//缺省值
         }
+    }
+
+    public HomeGridAdapter(Context context) {
+        inflater = LayoutInflater.from(context);
+        //ImageLists.add(R.mipmap.v2__apps_ic__legwork);
+        //TextLists.add("用户信息");
+        ImageLists.add(R.mipmap.v2__apps_ic__workreport);
+        TextLists.add("资料查询");
+        ImageLists.add(R.mipmap.v3_crm_refund_analysis_customer);
+        TextLists.add("联系人");
+        ImageLists.add(R.mipmap.v2__apps_ic__workflow);
+        TextLists.add("派工");
+        ImageLists.add(R.mipmap.fault);
+        TextLists.add("故障处理");
     }
 
     public void addModule(String str){

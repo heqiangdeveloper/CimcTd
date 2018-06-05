@@ -4,28 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.activity.home.contact.ContactDetailActivity;
-import com.cimcitech.cimctd.activity.home.contact.CustomerShowActivity;
-import com.cimcitech.cimctd.adapter.contact.ContactAdapter;
 import com.cimcitech.cimctd.adapter.faulthandle.FaultHandleAdapter;
-import com.cimcitech.cimctd.bean.contact.Contact;
-import com.cimcitech.cimctd.bean.contact.ContactReq;
-import com.cimcitech.cimctd.bean.contact.ContactVo;
 import com.cimcitech.cimctd.bean.faulthandle.FaultHandle;
 import com.cimcitech.cimctd.bean.faulthandle.FaultHandleReq;
 import com.cimcitech.cimctd.bean.faulthandle.FaultHandleVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.ClearEditText;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -39,13 +35,13 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class FaultHandleActivity extends BaseActivity {
+public class FaultHandleActivity extends MyBaseActivity {
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-    @Bind(R.id.search_et)
-    EditText search_Et;
+    @Bind(R.id.search_bar)
+    ClearEditText search_Bar;
 
     private Handler handler = new Handler();
     private FaultHandleAdapter adapter;
@@ -61,7 +57,7 @@ public class FaultHandleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fault_handle);
         ButterKnife.bind(this);
-        //mLoading.show();
+        mLoading.show();
         initViewData();
         getData();
         Log.d("mymylog","oncreate()");
@@ -184,20 +180,53 @@ public class FaultHandleActivity extends BaseActivity {
             }
 
         });
+        //根据输入框输入值的改变来过滤搜索
+        search_Bar.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
+                filterData(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
-    @OnClick({R.id.back,R.id.search_bt})
+    /**
+     * 根据输入框中的值来过滤数据并更新RecyclerView
+     *
+     * @param filterStr
+     */
+    private void filterData(String filterStr) {
+        List<FaultHandle> filterDateList = new ArrayList<>();
+
+        if (TextUtils.isEmpty(filterStr)) {
+            filterDateList = data;
+        } else {
+            filterDateList.clear();
+            for (FaultHandle faultHandle : data) {
+                String name = faultHandle.getFaultType();//桥号
+                if (name.startsWith(filterStr.toString())){
+                    filterDateList.add(faultHandle);
+                }
+            }
+        }
+        adapter.updateList(filterDateList);
+    }
+
+    @OnClick({R.id.back})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
-                break;
-            case R.id.search_bt:
-                String faultTypeStr = search_Et.getText().toString().trim();
-                if(faultTypeStr.length() != 0){
-                    updateData();
-                }
-                //ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
         }
     }
@@ -205,7 +234,7 @@ public class FaultHandleActivity extends BaseActivity {
     public void getData() {
         String json = new Gson().toJson(new FaultHandleReq(pageNum, 10, null,
                 new FaultHandleReq.FaultHandleBean(null,null,null,
-                        search_Et.getText().toString().trim(),null,null)));
+                        "",null,null)));
         OkHttpUtils
                 .postString()
                 .url(Config.QUERY_FAULT_HANDLE)
@@ -218,6 +247,7 @@ public class FaultHandleActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 swipeRefreshLayout.setRefreshing(false);
                             }
 

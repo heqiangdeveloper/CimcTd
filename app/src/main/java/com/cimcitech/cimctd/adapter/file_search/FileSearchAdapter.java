@@ -98,20 +98,24 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 });
             }
             final MyFile item = data.get(position);
-            ((ItemViewHolder) holder).contractNo_Tv.setText(item.getContractNo() != null && !item
-                    .getContractNo().equals("") ? "合同号：" + item.getContractNo():"合同号：" + "");
+            //((ItemViewHolder) holder).contractNo_Tv.setText(item.getContractNo() != null && !item
+            //        .getContractNo().equals("") ? "合同号：" + item.getContractNo():"合同号：" + "");
+            //生产序列号
             ((ItemViewHolder) holder).serialNum_Tv.setText(item.getSerialNum() != null && !item
-                    .getSerialNum().equals("") ? "生产序列号：" + item.getSerialNum() : "生产序列号：" + "");
+                    .getSerialNum().equals("") ? "" + item.getSerialNum() : "" + "");
+            //客户
             ((ItemViewHolder) holder).custName_Tv.setText(item.getCustName() != null && !item
-                    .getCustName().equals("") ? "客户：" + item.getCustName() : "客户：" + "" );
+                    .getCustName().equals("") ? "" + item.getCustName() : "" + "" );
+            //工号
             ((ItemViewHolder) holder).jobNum_Tv.setText(item.getJobNum() != null && !item
-                    .getJobNum().equals("") ? "工号：" + item.getJobNum():"工号：" + "");
+                    .getJobNum().equals("") ? "" + item.getJobNum():"" + "");
+            //桥号
             ((ItemViewHolder) holder).machineNum_Tv.setText(item.getMachineNum() != null && !item
-                    .getMachineNum().equals("") ? "桥号：" + item.getMachineNum() : "桥号：" + "");
-            ((ItemViewHolder) holder).productionDate_Tv.setText(item.getProductionDate() != null
-                    ? "出厂日：" + DateTool.getDateStr(item.getProductionDate()) : "出厂日：" + "");
-            ((ItemViewHolder) holder).mainDate_Tv.setText(item.getMainDate() != null
-                    ? "维保起算日：" + DateTool.getDateStr(item.getMainDate()) : "维保起算日：" + "");
+                    .getMachineNum().equals("") ? "" + item.getMachineNum() : "" + "");
+            //((ItemViewHolder) holder).productionDate_Tv.setText(item.getProductionDate() != null
+            //        ? "出厂日：" + DateTool.getDateStr(item.getProductionDate()) : "出厂日：" + "");
+            //((ItemViewHolder) holder).mainDate_Tv.setText(item.getMainDate() != null
+             //       ? "维保起算日：" + DateTool.getDateStr(item.getMainDate()) : "维保起算日：" + "");
         }
     }
 
@@ -133,18 +137,17 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView contractNo_Tv,serialNum_Tv,custName_Tv,jobNum_Tv,machineNum_Tv,
-                productionDate_Tv,mainDate_Tv;
+        TextView serialNum_Tv,custName_Tv,jobNum_Tv,machineNum_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
-            contractNo_Tv = view.findViewById(R.id.contractNo_tv);
+            //contractNo_Tv = view.findViewById(R.id.contractNo_tv);合同号
             serialNum_Tv = view.findViewById(R.id.serialNum_tv);
             custName_Tv = view.findViewById(R.id.custName_tv);
             jobNum_Tv = view.findViewById(R.id.jobNum_tv);
             machineNum_Tv = view.findViewById(R.id.machineNum_tv);
-            productionDate_Tv = view.findViewById(R.id.productionDate_tv);
-            mainDate_Tv = view.findViewById(R.id.mainDate_tv);
+            //productionDate_Tv = view.findViewById(R.id.productionDate_tv);出厂日期
+            //mainDate_Tv = view.findViewById(R.id.mainDate_tv);
         }
     }
 
@@ -153,5 +156,14 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public FootViewHolder(View view) {
             super(view);
         }
+    }
+
+    /**
+     * 提供给Activity刷新数据
+     * @param list
+     */
+    public void updateList(List<MyFile> list){
+        this.data = list;
+        notifyDataSetChanged();
     }
 }

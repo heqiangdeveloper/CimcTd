@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.bean.contact.Contact;
 import com.cimcitech.cimctd.bean.contact.Customer;
+import com.cimcitech.cimctd.bean.contact.LettersCustomer;
 
 import java.util.List;
 
@@ -25,13 +26,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    private List<Customer> data;
+    private List<LettersCustomer> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
     private Context context;
 
-    public CustomerAdapter(Context context, List<Customer> data) {
+    public CustomerAdapter(Context context, List<LettersCustomer> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -70,7 +71,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             View view = inflater.inflate(R.layout.customer_show_item_view, parent, false);
             return new ItemViewHolder(view);
         } else if (viewType == TYPE_FOOTER) {
-            View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
+            //View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
+            View view = inflater.inflate(R.layout.recycler_end_view, parent, false);
             return new FootViewHolder(view);
         } else if (viewType == TYPE_END) {
             View view = inflater.inflate(R.layout.recycler_end_view, parent, false);
@@ -82,7 +84,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
-            final Customer item = data.get(position);
+            final LettersCustomer item = data.get(position);
             if (onItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -103,10 +105,20 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
             }
 
-            ((ItemViewHolder) holder).custCode_Tv.setText(item.getCustCode() != null && !item
-                    .getCustCode().equals("") ? "" + item.getCustCode():"" + "");
+            /*((ItemViewHolder) holder).custCode_Tv.setText(item.getCustCode() != null && !item
+                    .getCustCode().equals("") ? "" + item.getCustCode():"" + "");*/
+            ((ItemViewHolder) holder).icon_Tv.setText(item.getCustCode());
             ((ItemViewHolder) holder).custName_Tv.setText(item.getCustName() != null && !item
                     .getCustName().equals("") ? "" + item.getCustName() : "" + "");
+
+            int section = getSectionForPosition(position);
+            //如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
+            if (position == getPositionForSection(section)) {
+                ((ItemViewHolder) holder).tag_Tv.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).tag_Tv.setText(data.get(position).getLetters());
+            } else {
+                ((ItemViewHolder) holder).tag_Tv.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -128,12 +140,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView custName_Tv,custCode_Tv;
+        TextView custName_Tv,tag_Tv,icon_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
             custName_Tv = view.findViewById(R.id.custName_tv);
-            custCode_Tv = view.findViewById(R.id.custCode_tv);
+            icon_Tv = view.findViewById(R.id.icon_tv);
+            tag_Tv = view.findViewById(R.id.tag_tv);
         }
     }
 
@@ -142,5 +155,35 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public FootViewHolder(View view) {
             super(view);
         }
+    }
+
+    /**
+     * 根据ListView的当前位置获取分类的首字母的char ascii值
+     */
+    public int getSectionForPosition(int position) {
+        return data.get(position).getLetters().charAt(0);
+    }
+
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     */
+    public int getPositionForSection(int section) {
+        for (int i = 0; i < getItemCount() -1; i++) {
+            String sortStr = data.get(i).getLetters();
+            char firstChar = sortStr.toUpperCase().charAt(0);
+            if (firstChar == section) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 提供给Activity刷新数据
+     * @param list
+     */
+    public void updateList(List<LettersCustomer> list){
+        this.data = list;
+        notifyDataSetChanged();
     }
 }

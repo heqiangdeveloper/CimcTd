@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/white">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
         android:layout_marginBottom="0dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:padding="2dp"
+        android:layout_marginLeft="0dip"
+        android:layout_marginRight="30dip"
+        android:padding="0dp"
         android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/tag_tv"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#EBEBEB"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="A"
+            android:textColor="#909090" />
         <LinearLayout
-            android:padding="2dp"
-            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:layout_marginBottom="0dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:padding="0dp"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/custCode_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="客户代码：123"
-                android:textColor="@color/black_33"
-                android:textSize="18sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:padding="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal">
+                android:id="@+id/icon_tv"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textSize="@dimen/contact_adapter_size"
+                android:background="@mipmap/green_circle"
+                android:text="启用"/>
             <TextView
                 android:id="@+id/custName_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:text="客户名称：123"
-                android:textColor="#C4C5C6"
-                android:textSize="14sp" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="客户名称"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_adapter_size" />
         </LinearLayout>
-        <View
-            android:layout_marginTop="6dp"
-            android:background="#F2F2F2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
 
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="65dp"
+        android:background="#F2F2F2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
     </LinearLayout>
-</LinearLayout>

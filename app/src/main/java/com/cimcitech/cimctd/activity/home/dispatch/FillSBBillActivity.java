@@ -24,7 +24,7 @@ import com.cimcitech.cimctd.bean.dispatch.SaleDispatchReq;
 import com.cimcitech.cimctd.bean.dispatch.saleMaintenPlanVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -42,7 +42,7 @@ import okhttp3.MediaType;
  * Created by lyw on 2018/4/23.
  */
 
-public class FillSBBillActivity extends BaseActivity {
+public class FillSBBillActivity extends MyBaseActivity {
     @Bind(R.id.sale_view)
     View sale_View;
     @Bind(R.id.main_view)

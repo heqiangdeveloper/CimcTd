@@ -26,7 +26,7 @@ import android.support.v7.app.AppCompatActivity;
  * @author gao_chun
  * 该类为Activity基类
  */
-public class BaseActivity extends AppCompatActivity {
+public class MyBaseActivity extends AppCompatActivity {
 
     public static final String TAG = "tdlog";
 

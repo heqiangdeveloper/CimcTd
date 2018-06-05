@@ -1,22 +1,18 @@
 package com.cimcitech.cimctd.activity.home.modify_password;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.activity.main.LoginActivity;
 import com.cimcitech.cimctd.rsa.RSAUtils;
-import com.cimcitech.cimctd.utils.ApkUpdateUtil;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.ToastUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -28,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-public class ModifyPasswordActivity extends BaseActivity {
+public class ModifyPasswordActivity extends MyBaseActivity {
 
     @Bind(R.id.back_rl)
     RelativeLayout backRl;

@@ -13,7 +13,7 @@ import com.cimcitech.cimctd.bean.dispatch.Dispatch;
 import com.cimcitech.cimctd.bean.dispatch.DispatchVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.DateTool;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -32,7 +32,7 @@ import okhttp3.Call;
  * Created by lyw on 2018/4/23.
  */
 
-public class DispatchDetailActivity extends BaseActivity {
+public class DispatchDetailActivity extends MyBaseActivity {
     @Bind(R.id.custName_tv)
     TextView custName_Tv;
     @Bind(R.id.contractNo_tv)

@@ -7,11 +7,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,26 +14,24 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.activity.home.file_search.FileSearchDetailActivity;
 import com.cimcitech.cimctd.adapter.PopupWindowAdapter;
 import com.cimcitech.cimctd.adapter.file_search.FileSearchAdapter;
 import com.cimcitech.cimctd.bean.contact.ContactAddReq;
 import com.cimcitech.cimctd.bean.contact.ContactEnumVo;
-import com.cimcitech.cimctd.bean.contact.ContactModifyReq;
-import com.cimcitech.cimctd.bean.contact.Customer;
+import com.cimcitech.cimctd.bean.contact.LettersCustomer;
 import com.cimcitech.cimctd.bean.file_search.MyFile;
-import com.cimcitech.cimctd.bean.file_search.FileSearchReq;
 import com.cimcitech.cimctd.bean.file_search.FileSearchVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.DateTool;
 import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -61,7 +54,7 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class ContactAddActivity extends BaseActivity {
+public class ContactAddActivity extends MyBaseActivity {
     @Bind(R.id.createTime_tv)
     TextView createTime_Tv;
     @Bind(R.id.contactName_et)
@@ -98,8 +91,10 @@ public class ContactAddActivity extends BaseActivity {
     TextView isPass_Tv;
     @Bind(R.id.isState_tv)
     TextView isState_Tv;
-    @Bind(R.id.commit_tv)
-    TextView commit_Tv;
+    @Bind(R.id.save_tv)
+    TextView save_Tv;
+    @Bind(R.id.back)
+    ImageView back_iv;
 
     private Handler handler = new Handler();
     private FileSearchAdapter adapter;
@@ -111,7 +106,7 @@ public class ContactAddActivity extends BaseActivity {
     private String TAG = "fileSearchlog";
     private int mYear,mMonth,mDay;
     private ContactEnumVo contactEnumVo;
-    private Customer customer;
+    private LettersCustomer lettersCustomer;
     private final static int SEXVALUE = 1;
     private final static int ISPASSVALUE = 2;
     private final static int ISSTATEVALUE = 3;
@@ -129,7 +124,7 @@ public class ContactAddActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_add);
         ButterKnife.bind(this);
-        customer = (Customer) getIntent().getSerializableExtra("customer");
+        lettersCustomer = (LettersCustomer) getIntent().getSerializableExtra("lettersCustomer");
         final Calendar ca = Calendar.getInstance();
         mYear = ca.get(Calendar.YEAR);
         mMonth = ca.get(Calendar.MONTH);
@@ -141,7 +136,11 @@ public class ContactAddActivity extends BaseActivity {
 
     public void initViewData(){
         createTime_Tv.setText(DateTool.getDateStr(System.currentTimeMillis()));
-        custName_Tv.setText(customer.getCustName());
+        custName_Tv.setText(lettersCustomer.getCustName());
+
+        sex_Tv.setText("男");
+        isState_Tv.setText("启用");
+        isPass_Tv.setText("是");
     }
 
     @Override
@@ -154,13 +153,14 @@ public class ContactAddActivity extends BaseActivity {
     }
 
     @OnClick({R.id.back,R.id.sex_tv,R.id.isPass_tv,R.id.isState_tv,R.id.internalRelaValue_tv,R.id
-            .relationLevelValue_tv,R.id.birthday_tv,R.id.commit_tv})
+            .relationLevelValue_tv,R.id.birthday_tv,R.id.save_tv})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back:
+                startActivity(new Intent(ContactAddActivity.this,ContactActivity.class));
                 finish();
                 break;
-            case R.id.commit_tv:
+            case R.id.save_tv:
                 if(!checkInput()) return;
                 commitData();
                 break;
@@ -388,8 +388,8 @@ public class ContactAddActivity extends BaseActivity {
 
     public void commitData() {
         Long contactId = null;
-        Long custId = customer.getCustId();
-        String custName = customer.getCustName();
+        Long custId = lettersCustomer.getCustId();
+        String custName = lettersCustomer.getCustName();
         String contactName = contactName_Et.getText().toString().trim();
         String sex = sex_Tv.getText().toString().trim();
         String deptName = deptName_Et.getText().toString().trim();
@@ -467,6 +467,8 @@ public class ContactAddActivity extends BaseActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 if(mLoading.isShowing()) mLoading.dismiss();
+                                Toast.makeText(ContactAddActivity.this,"添加联系人失败，请检查网络", Toast
+                                        .LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -477,9 +479,9 @@ public class ContactAddActivity extends BaseActivity {
                                     if (json.getBoolean("success")) {
                                         Toast.makeText(ContactAddActivity.this, "新增成功", Toast
                                                 .LENGTH_SHORT).show();
-                                        finish();
                                         startActivity(new Intent(ContactAddActivity.this,
                                                 ContactActivity.class));
+                                        finish();
                                     }else{
                                         Toast.makeText(ContactAddActivity.this, json
                                                 .getString("msg"), Toast.LENGTH_SHORT).show();
@@ -490,5 +492,11 @@ public class ContactAddActivity extends BaseActivity {
                                 }
                             }
                         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        back_iv.callOnClick();
     }
 }

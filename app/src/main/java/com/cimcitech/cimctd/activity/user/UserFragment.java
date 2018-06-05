@@ -207,7 +207,7 @@ public class UserFragment extends Fragment {
                         Toast.makeText(getActivity(), "无法连接网络，请检查网络！", Toast.LENGTH_SHORT).show();
                     } else {
                         new AlertDialog.Builder(getActivity())
-                                .setTitle("提示")
+                                //.setTitle("提示")
                                 .setMessage("检测到新版本是否下载？")
                                 .setCancelable(false)
                                 .setPositiveButton("下载安装", new DialogInterface.OnClickListener() {
@@ -227,8 +227,24 @@ public class UserFragment extends Fragment {
                 }
                 break;
             case R.id.out_login:
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
+                new AlertDialog.Builder(getActivity())
+                        //.setTitle("提示")
+                        .setMessage("您确定要退出登录吗？")
+                        .setCancelable(false)
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startActivity(new Intent(getActivity(), LoginActivity.class));
+                                getActivity().finish();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create().show();
                 break;
         }
     }

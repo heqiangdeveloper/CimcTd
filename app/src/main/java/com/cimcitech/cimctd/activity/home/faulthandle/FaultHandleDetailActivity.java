@@ -3,65 +3,27 @@ package com.cimcitech.cimctd.activity.home.faulthandle;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.adapter.faulthandle.FaultHandleAdapter;
 import com.cimcitech.cimctd.bean.faulthandle.FaultHandle;
-import com.cimcitech.cimctd.bean.faulthandle.FaultHandleImageReq;
-import com.cimcitech.cimctd.bean.faulthandle.FaultHandleReq;
-import com.cimcitech.cimctd.bean.faulthandle.FaultHandleVo;
 import com.cimcitech.cimctd.utils.Config;
-import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.widget.BaseActivity;
-import com.google.gson.Gson;
+import com.cimcitech.cimctd.widget.MyBaseActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
-import com.zhy.http.okhttp.callback.Callback;
-import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.Response;
 
-import static com.cimcitech.cimctd.R.id.webview;
-
-public class FaultHandleDetailActivity extends BaseActivity {
+public class FaultHandleDetailActivity extends MyBaseActivity {
     @Bind(R.id.productName_tv)
     TextView productName_Tv;
     @Bind(R.id.partName_tv)
@@ -99,13 +61,13 @@ public class FaultHandleDetailActivity extends BaseActivity {
     }
 
     public void initView(){
-        productName_Tv.setText(faultHandle.getProductName());
-        partName_Tv.setText(faultHandle.getPartName());
-        placeName_Tv.setText(faultHandle.getPlaceName());
-        faultType_Tv.setText(faultHandle.getFaultType());
-        drive_Tv.setText(faultHandle.getDrive());
-        status_Tv.setText(faultHandle.getStatus() == 0 ? "禁用":"启用");
-        approach_Tv.setText(faultHandle.getApproach());
+        productName_Tv.setText(faultHandle.getProductName());//所属产品
+        partName_Tv.setText(faultHandle.getPartName());//所属部件
+        placeName_Tv.setText(faultHandle.getPlaceName());//位置
+        faultType_Tv.setText(faultHandle.getFaultType());//故障类型
+        drive_Tv.setText(faultHandle.getDrive());//器件
+        status_Tv.setText(faultHandle.getStatus() == 0 ? "禁用":"启用");//状态
+        approach_Tv.setText(faultHandle.getApproach());//处理办法
         //approachIcon_Iv.setImageResource(faultHandle.getProductName());
 
     }

@@ -17,7 +17,7 @@
             android:layout_centerInParent="true"
             android:text="我的"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="@dimen/contact_detail_label_size" />
     </RelativeLayout>
 
     <LinearLayout
@@ -33,7 +33,7 @@
             android:padding="15dip"
             android:text="当前账号"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="@dimen/contact_detail_label_size" />
 
         <TextView
             android:id="@+id/user_name_tv"
@@ -59,7 +59,7 @@
             android:padding="15dip"
             android:text="清除缓存"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="@dimen/contact_detail_label_size" />
 
         <TextView
             android:id="@+id/clear_cache_tv"
@@ -68,8 +68,8 @@
             android:gravity="right"
             android:padding="15dip"
             android:text="0.0KB"
-            android:textColor="@color/alpha80"
-            android:textSize="15sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/contact_detail_label_size" />
     </LinearLayout>
 
     <TextView
@@ -82,7 +82,7 @@
         android:padding="15dip"
         android:text="密码修改"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="@dimen/contact_detail_label_size" />
 
     <TextView
         android:id="@+id/about_tv"
@@ -94,7 +94,7 @@
         android:padding="15dip"
         android:text="关于"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="@dimen/contact_detail_label_size" />
 
     <TextView
         android:layout_width="match_parent"
@@ -118,7 +118,7 @@
         android:padding="15dip"
         android:text="版本检查"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="@dimen/contact_detail_label_size" />
 
     <TextView
         android:id="@+id/out_login"
@@ -130,5 +130,5 @@
         android:padding="15dip"
         android:text="退出当前账号"
         android:textColor="@color/red"
-        android:textSize="15sp" />
+        android:textSize="@dimen/contact_detail_label_size" />
 </LinearLayout>

@@ -103,17 +103,28 @@ public class FaultHandleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 });
             }
 
-            ((ItemViewHolder) holder).status_tv.setText(item.getStatus() == 0?
-                    "禁用":"启用");
-            ((ItemViewHolder) holder).status_tv.setBackgroundResource(item.getStatus() == 0?
-                    R.mipmap.red_circle:R.mipmap.green_circle);
-            ((ItemViewHolder) holder).productName_tv.setText(item.getProductName() != null && !item
+            ((ItemViewHolder) holder).partName_Tv.setText(item.getPartName() != null?
+                    getSubPartName(item.getPartName()):"未知");//所属部件
+            ((ItemViewHolder) holder).partName_Tv.setBackgroundResource(R.mipmap.green_circle);
+            ((ItemViewHolder) holder).productName_Tv.setText(item.getProductName() != null && !item
                     .getProductName().equals("") ? "" + item.getProductName():"" + "");
-            ((ItemViewHolder) holder).partName_tv.setText(item.getPartName() != null && !item
-                    .getPartName().equals("") ? "" + item.getPartName() : "" + "");
-            ((ItemViewHolder) holder).faultType_tv.setText(item.getFaultType() != null && !item
+            ((ItemViewHolder) holder).placeName_Tv.setText(item.getPlaceName() != null && !item
+                    .getPlaceName().equals("") ? "" + item.getPlaceName() : "" + "");
+            ((ItemViewHolder) holder).faultType_Tv.setText(item.getFaultType() != null && !item
                     .getFaultType().equals("") ? "" + item.getFaultType() : "" + "");
         }
+    }
+
+    public String getSubPartName(String str){
+        String subStr = "";
+        if(str.length() == 0){
+            subStr = "未知";
+        }else if(str.length() == 1){
+            subStr = str;
+        }else{
+            subStr = str.substring(0,2);
+        }
+        return subStr;
     }
 
     @Override
@@ -134,14 +145,14 @@ public class FaultHandleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView productName_tv,partName_tv,faultType_tv,status_tv;
+        TextView productName_Tv,partName_Tv,faultType_Tv,placeName_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
-            productName_tv = view.findViewById(R.id.productName_tv);
-            partName_tv = view.findViewById(R.id.partName_tv);
-            faultType_tv = view.findViewById(R.id.faultType_tv);
-            status_tv = view.findViewById(R.id.status_tv);
+            productName_Tv = view.findViewById(R.id.productName_tv);
+            partName_Tv = view.findViewById(R.id.partName_tv);
+            faultType_Tv = view.findViewById(R.id.faultType_tv);
+            placeName_Tv = view.findViewById(R.id.placeName_tv);
         }
     }
 
@@ -150,5 +161,14 @@ public class FaultHandleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public FootViewHolder(View view) {
             super(view);
         }
+    }
+
+    /**
+     * 提供给Activity刷新数据
+     * @param list
+     */
+    public void updateList(List<FaultHandle> list){
+        this.data = list;
+        notifyDataSetChanged();
     }
 }

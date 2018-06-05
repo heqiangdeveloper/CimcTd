@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:scrollbars="none">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical">
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/message_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_detail_label_size"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <com.cimcitech.cimctd.widget.ClearEditText
+            android:id="@+id/filter_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:padding="10dp"
+            android:paddingLeft="8dp"
+            android:background="@color/white"
+            android:drawableLeft="@drawable/search24"
+            android:drawablePadding="10dp"
+            android:hint="按姓名搜索联系人"
+            android:maxLines="1"
+            android:textSize="15dp" />
     </LinearLayout>
-</ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+    </ScrollView>
+</LinearLayout>
