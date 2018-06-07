@@ -244,7 +244,8 @@ public class ContactActivity extends MyBaseActivity {
                 break;
             case R.id.add_ib:
                 Intent intent = new Intent(new Intent(ContactActivity.this,
-                    CustomerShowActivity.class));
+                    ContactDetailActivity.class));
+                intent.putExtra("isAdd",true);
                 startActivity(intent);
                 //finish();
                 break;

@@ -118,7 +118,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         gotoScheduleFragment();
         initBroadcastReceiver();
         //关闭抽屉菜单，禁止手势滑动
-        //dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     private void initBroadcastReceiver() {

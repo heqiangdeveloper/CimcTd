@@ -4,6 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:focusable="true"
+             android:background="@color/white"
               android:focusableInTouchMode="true">
 
     <LinearLayout
@@ -54,10 +55,12 @@
             android:id="@+id/filter_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"
+            android:layout_marginLeft="@dimen/search_bar_margin"
+            android:layout_marginRight="@dimen/search_bar_margin"
+            android:layout_marginBottom="@dimen/search_bar_margin"
             android:padding="10dp"
             android:paddingLeft="8dp"
-            android:background="@color/white"
+            android:background="#EDEDEE"
             android:drawableLeft="@drawable/search24"
             android:drawablePadding="10dp"
             android:hint="按姓名搜索联系人"

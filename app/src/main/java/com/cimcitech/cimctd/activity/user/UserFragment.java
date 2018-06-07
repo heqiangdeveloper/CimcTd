@@ -30,6 +30,7 @@ import com.cimcitech.cimctd.activity.home.about.AboutActivity;
 import com.cimcitech.cimctd.activity.home.modify_password.ModifyPasswordActivity;
 import com.cimcitech.cimctd.activity.main.LoginActivity;
 import com.cimcitech.cimctd.bean.ApkUpdateVo;
+import com.cimcitech.cimctd.rsa.RSAUtils;
 import com.cimcitech.cimctd.utils.ApkUpdateUtil;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
@@ -65,7 +66,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class UserFragment extends Fragment {
 
     @Bind(R.id.back_rl)
-    RelativeLayout backRl;
+    LinearLayout backRl;
     @Bind(R.id.about_tv)
     TextView aboutTv;
     @Bind(R.id.clear_cache_linear)
@@ -74,8 +75,8 @@ public class UserFragment extends Fragment {
     TextView checkVersionTv;
     @Bind(R.id.out_login)
     TextView outLogin;
-    @Bind(R.id.user_name_tv)
-    TextView userNameTv;
+    @Bind(R.id.userName_tv)
+    TextView userName_Tv;
     @Bind(R.id.clear_cache_tv)
     TextView clearCacheTv;
     @Bind(R.id.modify_psd_tv)
@@ -124,14 +125,8 @@ public class UserFragment extends Fragment {
     };
 
     private void getUserInfo() {
-        userNameTv.setText(Config.userName);
-        if (sp.getString("user_name", "") != "") {
-            //String name = sp.getString("user_name", "");
-            String pwd = sp.getString("password", "");
-            //System.out.println(name + pwd);
-            //userNameTv.setText(sp.getString("user_name", ""));
-
-        }
+        //userName_Tv.setText(Config.userName);
+        userName_Tv.setText(sp.getString("user_name", ""));
     }
 
     @Override
@@ -172,7 +167,7 @@ public class UserFragment extends Fragment {
     @OnClick({R.id.about_tv, R.id.check_version_tv, R.id.out_login,R.id.clear_cache_linear,R.id.modify_psd_tv})
     public void onclick(View view) {
         switch (view.getId()) {
-            case R.id.clear_cache_linear:
+            case R.id.clear_cache_linear://清除缓存
                 new AlertDialog.Builder(getActivity())
                         .setTitle("提示")
                         .setMessage("是否要清除缓存？")
@@ -193,13 +188,13 @@ public class UserFragment extends Fragment {
                             }
                         }).create().show();
                 break;
-            case R.id.modify_psd_tv:
+            case R.id.modify_psd_tv://修改密码
                 startActivity(new Intent(getActivity(), ModifyPasswordActivity.class));
                 break;
-            case R.id.about_tv:
+            case R.id.about_tv://关于
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
-            case R.id.check_version_tv:
+            case R.id.check_version_tv://版本检查
                 if (!checkApkVersion()) {
                     Toast.makeText(getActivity(), "已经是最新版本！", Toast.LENGTH_SHORT).show();
                 } else {
@@ -226,7 +221,7 @@ public class UserFragment extends Fragment {
                     }
                 }
                 break;
-            case R.id.out_login:
+            case R.id.out_login://退出
                 new AlertDialog.Builder(getActivity())
                         //.setTitle("提示")
                         .setMessage("您确定要退出登录吗？")
@@ -235,6 +230,7 @@ public class UserFragment extends Fragment {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                ModifyUserInfoPreference();//清除登录信息
                                 startActivity(new Intent(getActivity(), LoginActivity.class));
                                 getActivity().finish();
                             }
@@ -248,6 +244,15 @@ public class UserFragment extends Fragment {
                 break;
         }
     }
+
+    public void ModifyUserInfoPreference(){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("password", "");
+        editor.putString("realName", "");
+        editor.putLong("userId",0);
+        editor.commit();
+    }
+
 
     public void startToDownload() {
         String filePath = Environment.getExternalStorageDirectory() + "/newversion.apk";

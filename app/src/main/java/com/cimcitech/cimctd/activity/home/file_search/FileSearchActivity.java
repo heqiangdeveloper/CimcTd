@@ -254,11 +254,13 @@ public class FileSearchActivity extends MyBaseActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 if(mLoading.isShowing()) mLoading.dismiss();
+                                swipeRefreshLayout.setRefreshing(false);
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
                                 if(mLoading.isShowing()) mLoading.dismiss();
+                                swipeRefreshLayout.setRefreshing(false);
                                 Log.d(TAG,"response is: " + response);
                                 fileSearchVo = GjsonUtil.parseJsonWithGson(response,FileSearchVo.class);
                                 if (fileSearchVo != null) {
@@ -274,12 +276,12 @@ public class FileSearchActivity extends MyBaseActivity {
                                             adapter.setNotMoreData(true);
                                         }
                                         adapter.notifyDataSetChanged();
-                                        swipeRefreshLayout.setRefreshing(false);
+                                        //swipeRefreshLayout.setRefreshing(false);
                                         adapter.notifyItemRemoved(adapter.getItemCount());
                                     }
                                 } else {
                                     adapter.notifyDataSetChanged();
-                                    swipeRefreshLayout.setRefreshing(false);
+                                    //swipeRefreshLayout.setRefreshing(false);
                                 }
                             }
                         }

@@ -27,23 +27,27 @@
             android:id="@+id/filter_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"
+            android:layout_marginTop="@dimen/search_bar_margin"
+            android:layout_marginLeft="@dimen/search_bar_margin"
+            android:layout_marginRight="@dimen/search_bar_margin"
+            android:layout_marginBottom="@dimen/search_bar_margin"
             android:padding="10dp"
             android:paddingLeft="8dp"
-            android:background="@color/white"
+            android:background="#EBEBEB"
             android:drawableLeft="@drawable/search24"
             android:drawablePadding="10dp"
-            android:hint="按姓名搜索联系人"
+            android:hint="搜索"
             android:maxLines="1"
             android:textSize="15dp" />
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ListView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </ListView>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" >
+        </android.support.v7.widget.RecyclerView>
     </ScrollView>
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -109,6 +110,8 @@ public class ContactDetailActivity extends MyBaseActivity {
     TextView contact_more_menu_invalid_Tv;
     @Bind(R.id.titleName_tv)
     TextView titleName_Tv;
+    @Bind(R.id.custName_red_tv)
+    TextView custName_red_Tv;
 
     private Handler handler = new Handler();
     private List<MyFile> data = new ArrayList<MyFile>();
@@ -133,21 +136,28 @@ public class ContactDetailActivity extends MyBaseActivity {
     private Map<String,String> RLMap = null;
     private boolean isAdd;
     public static String REFRESHCONTACTDATA = "com.cimcitech.cimctd.refresh.contact";
+    private final int REQUESTCODE = 1;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_detail2);
+        setContentView(R.layout.activity_contact_detail_66);
         ButterKnife.bind(this);
         isAdd = getIntent().getBooleanExtra("isAdd",true);
         if(isAdd){//新增
-            lettersCustomer = (LettersCustomer) getIntent().getSerializableExtra("lettersCustomer");
+            //lettersCustomer = (LettersCustomer) getIntent().getSerializableExtra
+            //        ("lettersCustomer");
+            custName_red_Tv.setVisibility(View.VISIBLE);
+            custName_Tv.setClickable(true);
             titleName_Tv.setText("添加联系人");
             contact_more_menu_add_Tv.setVisibility(View.VISIBLE);
             contact_more_menu_save_Tv.setVisibility(View.GONE);
             contact_more_menu_invalid_Tv.setVisibility(View.GONE);
             contact_more_menu_delete_Tv.setVisibility(View.GONE);
         }else {
+            custName_red_Tv.setVisibility(View.VISIBLE);
+            custName_Tv.setClickable(false);
             lettersContact = (LettersContact)getIntent().getSerializableExtra("LettersContact");
             titleName_Tv.setText("联系人信息详情");
             contact_more_menu_add_Tv.setVisibility(View.GONE);
@@ -164,6 +174,18 @@ public class ContactDetailActivity extends MyBaseActivity {
         mLoading.show();
         getEnumData();//获取下拉数据
         initViewData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == REQUESTCODE){
+            //注意不能使用下面这段代码，这是接收startActivity()方法的代码
+            //lettersCustomer = (LettersCustomer) getIntent().getSerializableExtra
+            //        ("lettersCustomer");
+            lettersCustomer = (LettersCustomer)data.getSerializableExtra("lettersCustomer");
+            custName_Tv.setText(lettersCustomer.getCustName());
+        }
     }
 
     @Override
@@ -199,7 +221,7 @@ public class ContactDetailActivity extends MyBaseActivity {
             isState_Tv.setText(lettersContact.getIsState() == 1?"禁用":"启用");//1:禁用，0：启用
         }else{
             createTime_Tv.setText(DateTool.getDateStr(System.currentTimeMillis()));
-            custName_Tv.setText(lettersCustomer.getCustName());
+            //custName_Tv.setText(lettersCustomer.getCustName());
 
             sex_Tv.setText("男");
             isState_Tv.setText("启用");
@@ -209,9 +231,14 @@ public class ContactDetailActivity extends MyBaseActivity {
 
     @OnClick({R.id.back,R.id.sex_tv,R.id.isPass_tv,R.id.isState_tv,R.id.internalRelaValue_tv,R.id
             .relationLevelValue_tv,R.id.birthday_tv,R.id.more_iv,R.id.contact_more_menu_delete,
-            R.id.contact_more_menu_invalid,R.id.contact_more_menu_save,R.id.contact_more_menu_add})
+            R.id.contact_more_menu_invalid,R.id.contact_more_menu_save,R.id.contact_more_menu_add,
+            R.id.custName_tv})
     public void onclick(View view) {
         switch (view.getId()) {
+            case R.id.custName_tv:
+                startActivityForResult(new Intent(ContactDetailActivity.this,CustomerShowActivity
+                        .class),REQUESTCODE);
+                break;
             case R.id.back:
                 startActivity(new Intent(ContactDetailActivity.this,ContactActivity.class));
                 //finish();
@@ -581,8 +608,11 @@ public class ContactDetailActivity extends MyBaseActivity {
         String addr1 = addr1_Et.getText().toString().trim();
         String addr2 = addr2_Et.getText().toString().trim();
         int isPass = isPass_Tv.getText().toString().trim().equals("是")?1:0;
-        Long creater = Config.userId;
-        String createName = Config.userName;
+        //Long creater = Config.userId;
+        //String createName = Config.userName;
+        sp = getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
+        Long creater = sp.getLong("userId",0);
+        String createName = sp.getString("user_name","");
         Long createTime = System.currentTimeMillis();
         Long updater = creater;
         String updateName = createName;
@@ -691,8 +721,11 @@ public class ContactDetailActivity extends MyBaseActivity {
         Long creater = lettersContact.getCreater();
         String createName = lettersContact.getCreateName();
         Long createTime = lettersContact.getCreateTime();
-        Long updater = Config.userId;
-        String updateName = Config.realName;
+        //Long updater = Config.userId;
+        //String updateName = Config.realName;
+        sp = getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
+        Long updater = sp.getLong("userId",0);
+        String updateName = sp.getString("realName","");
         Long updateTime = System.currentTimeMillis();
         String internalRelaValue = internalRelaValue_Tv.getText().toString().trim();//内部关系
         String internalRela = getInternalRela(internalRelaValue);

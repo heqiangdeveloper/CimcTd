@@ -75,8 +75,8 @@ public class FaultHandleDetailActivity extends MyBaseActivity {
     public void getImage(){
         //String json = new Gson().toJson(new FaultHandleImageReq(faultHandle.getIconUrl()));
         if(null != faultHandle.getIconUrl()){
-            options = new DisplayImageOptions.Builder().showStubImage(R.mipmap.ic_launcher)
-                    .showImageForEmptyUri(R.mipmap.ic_launcher).showImageOnFail(R.mipmap.ic_launcher)
+            options = new DisplayImageOptions.Builder().showStubImage(R.mipmap.loading)
+                    .showImageForEmptyUri(R.mipmap.loading).showImageOnFail(R.mipmap.loading)
                     .cacheInMemory()
                     .cacheOnDisc()
                     .bitmapConfig(Bitmap.Config.ALPHA_8)

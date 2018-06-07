@@ -382,15 +382,15 @@
     <color name="colorDeepHui">#cc787878</color>
     <color name="redDark">#BE310E</color>
 
-    <color name="colorPrimary">#736EB0</color>
-    <color name="colorPrimaryDark">#736EB0</color>
+    <color name="colorPrimary">#4BB5FA</color>
+    <color name="colorPrimaryDark">#4BB5FA</color>
     <color name="colorAccent">#FF8594</color>
     <color name="colorBackground">#F0F1F5</color>
     <color name="colorWrite">#FFFFFF</color>
     <color name="colorTranslate">#00FFFFFF</color>
     <color name="colorRed">#FF0000</color>
 
-    <color name="color_schedule_purple">#9082BD</color>
+    <color name="color_schedule_purple">#4BB5FA</color>
     <color name="color_schedule_orange">#f6af80</color>
     <color name="color_schedule_pink">#E67986</color>
     <color name="color_schedule_yellow">#F7E373</color>

@@ -1,5 +1,6 @@
 package com.cimcitech.cimctd.activity.home.modify_password;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,12 +37,14 @@ public class ModifyPasswordActivity extends MyBaseActivity {
     EditText new_psd_Tv2;
     @Bind(R.id.commit_bt)
     Button commit_Bt;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_psd);
         ButterKnife.bind(this);
+        sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);//如果存在则打开它，否则创建新的Preferences
     }
 
     @OnClick({R.id.commit_bt,R.id.back_rl})
@@ -119,6 +122,7 @@ public class ModifyPasswordActivity extends MyBaseActivity {
                                 try{
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
+                                        ModifyUserInfoPreference();//修改SharedPreference中的密码
                                         Toast.makeText(ModifyPasswordActivity.this, "密码修改成功", Toast
                                                 .LENGTH_SHORT).show();
                                         finish();
@@ -132,5 +136,11 @@ public class ModifyPasswordActivity extends MyBaseActivity {
                                 }
                             }
                         });
+    }
+
+    public void ModifyUserInfoPreference(){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("password", RSAUtils.encrypt(new_psd_Tv1.getText().toString().trim(),Config.PUBLIC_KEY));
+        editor.commit();
     }
 }

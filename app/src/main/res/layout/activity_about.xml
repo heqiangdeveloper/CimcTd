@@ -9,7 +9,7 @@
         android:id="@+id/back_rl"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/white">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -24,8 +24,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="关于"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/contact_detail_label_size" />
     </RelativeLayout>
 
     <ImageView
@@ -61,15 +62,23 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:padding="5dip"
-                android:text="电话：0379-65937600"
+                android:text="电话：86-755-26688488"
                 android:textColor="@color/black_33" />
 
-            <TextView
+            <!--<TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:padding="5dip"
                 android:text="邮箱：lifo@lingyu.com"
+                android:textColor="@color/black_33" />-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="5dip"
+                android:text="地址：中国广东省深圳市宝安区福永福园二路9号中集空港工业园"
                 android:textColor="@color/black_33" />
 
             <TextView
@@ -77,15 +86,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:padding="5dip"
-                android:text="地址：河南省洛阳市洛阳区关林路与经二路交叉口"
-                android:textColor="@color/black_33" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="5dip"
-                android:text="洛阳中集凌宇汽车有限公司"
+                android:text="深圳中集天达空港设备有限公司"
                 android:textColor="@color/black_33" />
         </LinearLayout>
     </RelativeLayout>

@@ -110,11 +110,26 @@ public class LoginActivity extends MyBaseActivity {
 
             }
         });
-        getUserInfo();
-        if(userNameTv.getText().toString().trim().length() != 0){
-            userNameTv.setSelection(userNameTv.getText().toString().trim().length());
+
+        //如果是已登录过的，直接跳过登录界面
+        if(sp.getString("user_name","").length() != 0 &&
+                sp.getString("password","").length() != 0 &&
+                sp.getString("realName","").length() != 0 &&
+                sp.getLong("userId",0) != 0){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            if (sp.getString("user_name", "") != "") {
+                userNameTv.setText(sp.getString("user_name", ""));
+            }else{
+                userNameTv.setText("");
+            }
+            passwordTv.setText("");
+            if(userNameTv.getText().toString().trim().length() != 0){
+                userNameTv.setSelection(userNameTv.getText().toString().trim().length());
+            }
         }
-        //showLoginBtn();
     }
 
     public void loginBtnOn(){
@@ -195,7 +210,7 @@ public class LoginActivity extends MyBaseActivity {
             //afterencrypt = Base64Utils.encode(encryptByte);
             //afterencrypt = encryptByte.toString();
 
-            afterencrypt = RSAUtils.encrypt(psw,Config.PUBLIC_KEY);
+            afterencrypt = RSAUtils.encrypt(psw,Config.PUBLIC_KEY);//加密后的密码
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this,"rsa 加密失败！！",Toast.LENGTH_SHORT).show();
@@ -258,26 +273,15 @@ public class LoginActivity extends MyBaseActivity {
         }
     }
 
-    private void getUserInfo() {
-        if (sp.getString("user_name", "") != "") {
-            String name = sp.getString("user_name", "");
-            String pwd = sp.getString("password", "");
-            System.out.println(name + pwd);
-            userNameTv.setText(sp.getString("user_name", ""));
-            passwordTv.setText(sp.getString("password", ""));
-        }else{
-            userNameTv.setText("");
-            passwordTv.setText("");
-        }
-    }
-
     /***
      * 保存账户与密码
      */
     private void saveUserInfo() {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("user_name", userNameTv.getText().toString().trim());
-        editor.putString("password", passwordTv.getText().toString().trim());
+        editor.putString("password", afterencrypt);
+        editor.putString("realName", loginVo.getData().getRealname());
+        editor.putLong("userId", loginVo.getData().getUserId());
         editor.commit();
     }
 }

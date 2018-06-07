@@ -30,7 +30,7 @@ public class ShowFaultImageActivity extends MyBaseActivity {
         String url = getIntent().getStringExtra("url");
 
         options = new DisplayImageOptions.Builder().showStubImage(R.mipmap.loading)
-                .showImageForEmptyUri(R.mipmap.loading_fail).showImageOnFail(R.mipmap.loading_fail)
+                .showImageForEmptyUri(R.mipmap.loading).showImageOnFail(R.mipmap.loading)
                 .cacheInMemory()
                 .cacheOnDisc()
                 .bitmapConfig(Bitmap.Config.ALPHA_8)

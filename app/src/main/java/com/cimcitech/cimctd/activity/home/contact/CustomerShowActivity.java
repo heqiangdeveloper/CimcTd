@@ -166,9 +166,11 @@ public class CustomerShowActivity extends MyBaseActivity {
                 Intent intent = new Intent(CustomerShowActivity.this, ContactDetailActivity.class);
                 LettersCustomer lettersCustomer = (LettersCustomer) adapter.getAll().get(position);
                 intent.putExtra("lettersCustomer",lettersCustomer);
-                intent.putExtra("isAdd",true);
-                startActivity(intent);
-                finish();
+                //intent.putExtra("isAdd",true);
+                //startActivity(intent);
+                //startActivityForResult(intent,REQUESTCODE);
+                setResult(RESULT_OK,intent);
+                finish();//不能省略
             }
 
             @Override

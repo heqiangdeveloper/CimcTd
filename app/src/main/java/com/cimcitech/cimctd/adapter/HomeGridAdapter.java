@@ -74,13 +74,13 @@ public class HomeGridAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
         //ImageLists.add(R.mipmap.v2__apps_ic__legwork);
         //TextLists.add("用户信息");
-        ImageLists.add(R.mipmap.v2__apps_ic__workreport);
+        ImageLists.add(R.mipmap.file_menu_item);
         TextLists.add("资料查询");
-        ImageLists.add(R.mipmap.v3_crm_refund_analysis_customer);
+        ImageLists.add(R.mipmap.contact_menu_item);
         TextLists.add("联系人");
-        ImageLists.add(R.mipmap.v2__apps_ic__workflow);
+        ImageLists.add(R.mipmap.dispatch_menu_item);
         TextLists.add("派工");
-        ImageLists.add(R.mipmap.fault);
+        ImageLists.add(R.mipmap.fault_menu_item);
         TextLists.add("故障处理");
     }
 
