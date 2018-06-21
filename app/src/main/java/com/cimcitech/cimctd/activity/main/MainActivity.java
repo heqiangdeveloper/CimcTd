@@ -11,6 +11,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.chaychan.library.BottomBarItem;
+import com.chaychan.library.BottomBarLayout;
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.bean.AreaVo;
 import com.cimcitech.cimctd.utils.Config;
@@ -27,24 +29,31 @@ import okhttp3.Call;
 
 
 public class MainActivity extends AppCompatActivity {
-    private RadioGroup mRadioGroup;
+    //private RadioGroup mRadioGroup;
     private Fragment[] mFragments;
-    private RadioButton mRadioButtonHome;
+    //private RadioButton mRadioButtonHome;
 
     private String appAuthString = "";
     private static boolean mBackKeyPressed = false;//记录是否有首次按键
     private long firstTime = 0;
 
+    private BottomBarLayout mBottomBarLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
         mFragments = DataGenerator.getFragments();
+        mBottomBarLayout = (BottomBarLayout)findViewById(R.id.bbl);
         // 将activity设置为全屏显示
 
         //appAuthString = this.getIntent().getStringExtra("AuthString");
-        initView();
-        //getAreaData();
+        initView2();
+        mBottomBarLayout.setSmoothScroll(true);
+        mBottomBarLayout.setUnread(0,100);
+        mBottomBarLayout.setUnread(1,26);
+        mBottomBarLayout.showNotify(2);
+        mBottomBarLayout.setMsg(3,"NEW");
 
         //达到缓存的上限，就清理缓存
         /*Runtime rt = Runtime.getRuntime();
@@ -63,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mRadioGroup = (RadioGroup) findViewById(R.id.radio_group_button);
+        /*mRadioGroup = (RadioGroup) findViewById(R.id.radio_group_button);
         mRadioButtonHome = (RadioButton) findViewById(R.id.radio_button_home);
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             Fragment mFragment = null;
@@ -90,7 +99,34 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mRadioButtonHome.setChecked(true);
+        mRadioButtonHome.setChecked(true);*/
+    }
+
+    public void initView2(){
+        mBottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
+            Fragment mFragment = null;
+            @Override
+            public void onItemSelected(BottomBarItem bottomBarItem, int i, int position) {
+                for(int n = 0; n < 4; n++){
+                    mBottomBarLayout.getBottomItem(n).setStatus(false);
+                }
+                if(position == 0){//消息
+                    mFragment = mFragments[0];
+                }else if(position == 1){//首页
+                    mFragment = mFragments[1];
+                }else if(position == 2){//日程
+                    mFragment = mFragments[2];
+                }else{//我的
+                    mFragment = mFragments[3];
+                }
+                mBottomBarLayout.getBottomItem(position).setStatus(true);
+                if (mFragments != null) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_container, mFragment).commit();
+                }
+            }
+        });
+        //mBottomBarLayout.getBottomItem(1).setStatus(true);
+        mBottomBarLayout.getBottomItem(1).callOnClick();//默认选中首页
     }
 
     /**

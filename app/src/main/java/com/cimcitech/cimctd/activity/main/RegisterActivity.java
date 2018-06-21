@@ -37,11 +37,11 @@ public class RegisterActivity extends MyBaseActivity {
     @Bind(R.id.clear_name_iv)
     ImageView clear_name_Iv;
     @Bind(R.id.password_tv)
-    TextView password_Tv;
+    EditText password_Tv;
     @Bind(R.id.clear_password_iv)
     ImageView clear_password_Iv;
     @Bind(R.id.password_tv2)
-    TextView password_Tv2;
+    EditText password_Tv2;
     @Bind(R.id.clear_password_iv2)
     ImageView clear_password_Iv2;
     @Bind(R.id.verification_code_tv)
@@ -85,9 +85,10 @@ public class RegisterActivity extends MyBaseActivity {
         verification_code_Tv.setText("");
         password_Tv.setText("");
         password_Tv2.setText("");
+        userNameTv.setFocusableInTouchMode(true);
     }
 
-    public void textWatcher(TextView tv){
+    public void textWatcher(EditText tv){
         tv.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

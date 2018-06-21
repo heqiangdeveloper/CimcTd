@@ -1,10 +1,6 @@
 [
     {
-        "merged": "E:\\20180322\\CimcTd_v4_0530_add_schedule_v2\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
-        "source": "E:\\20180322\\CimcTd_v4_0530_add_schedule_v2\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
-    },
-    {
-        "merged": "E:\\20180322\\CimcTd_v4_0528_add_schedule\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
-        "source": "E:\\20180322\\CimcTd_v4_0528_add_schedule\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
+        "merged": "E:\\20180322\\CimcTd_v4_0612_add_schedule_v3\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
+        "source": "E:\\20180322\\CimcTd_v4_0612_add_schedule_v3\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
     }
 ]

@@ -207,7 +207,7 @@ public class CustomerShowActivity extends MyBaseActivity {
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back:
-                startActivity(new Intent(CustomerShowActivity.this,ContactActivity.class));
+                //startActivity(new Intent(CustomerShowActivity.this,ContactActivity.class));
                 finish();
         }
     }

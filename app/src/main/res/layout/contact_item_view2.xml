@@ -94,7 +94,7 @@
                         android:gravity="left"
                         android:text="电话"
                         android:padding="2dp"
-                        android:textColor="@color/black"
+                        android:textColor="#576B95"
                         android:textSize="@dimen/contact_detail_label_size" />
                     <TextView
                         android:id="@+id/isState_tv"

@@ -1,89 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@color/colorWrite"
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_marginBottom="2dp"
-        android:layout_height="40dp">
+    <include layout="@layout/activity_file_search_title"/>
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_alignParentLeft="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:gravity="center_vertical"
-            android:src="@mipmap/ic_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="资料查询"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="@dimen/contact_detail_label_size" />
-
-        <TextView
-            android:id="@+id/commit_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="40dip"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:text=""
-            android:textStyle="bold"
-            android:paddingRight="20dip"
-            android:textColor="#0288D1"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
-
-    <com.cimcitech.cimctd.widget.ClearEditText
-        android:layout_below="@id/title"
-        android:id="@+id/search_bar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/search_bar_margin"
-        android:layout_marginRight="@dimen/search_bar_margin"
-        android:layout_marginBottom="@dimen/search_bar_margin"
-        android:padding="10dp"
-        android:paddingLeft="8dp"
-        android:background="#EBEBEB"
-        android:drawableLeft="@drawable/search24"
-        android:drawablePadding="10dp"
-        android:hint="按桥号搜索"
-        android:maxLines="1"
-        android:textSize="@dimen/contact_detail_label_size" />
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/recycler_view_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/search_bar"
-        android:layout_marginBottom="5dip"
-        android:background="@android:color/white"
-        android:visibility="visible">
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_marginBottom="5dip"
+            android:background="@android:color/white"
+            android:visibility="visible">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </android.support.v4.widget.SwipeRefreshLayout>
-    </android.support.design.widget.CoordinatorLayout>
-</RelativeLayout>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/search_bar_margin"
+                    android:layout_marginRight="@dimen/search_bar_margin"
+                    android:scrollbars="vertical" />
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

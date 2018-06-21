@@ -61,4 +61,5 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile files('libs/pinyin4j-2.5.0.jar')
+    compile 'com.github.chaychan:BottomBarLayout:1.1.2'
 }

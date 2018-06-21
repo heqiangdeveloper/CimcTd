@@ -1,103 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:focusable="true"
-             android:background="@color/white"
-              android:focusableInTouchMode="true">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWrite"
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <include layout="@layout/activity_contact_title"/>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/title"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/dialog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:background="#9DDE76"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="30dp"
+            android:visibility="invisible" />
+
+        <com.cimcitech.cimctd.widget.SideBar
+            android:id="@+id/sideBar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
             android:background="@color/white"
-            android:layout_height="40dp">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:gravity="center_vertical"
-                android:src="@mipmap/ic_back" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="联系人信息"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="@dimen/contact_detail_label_size" />
-
-            <!--<TextView
-                android:id="@+id/add_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="40dip"
-                android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
-                android:text="添加"
-                android:textStyle="bold"
-                android:paddingRight="20dip"
-                android:textColor="#0288D1"
-                android:textSize="16sp" />-->
-
-        </RelativeLayout>
-
-        <com.cimcitech.cimctd.widget.ClearEditText
-            android:id="@+id/filter_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/search_bar_margin"
-            android:layout_marginRight="@dimen/search_bar_margin"
-            android:layout_marginBottom="@dimen/search_bar_margin"
-            android:padding="10dp"
-            android:paddingLeft="8dp"
-            android:background="#EDEDEE"
-            android:drawableLeft="@drawable/search24"
-            android:drawablePadding="10dp"
-            android:hint="按姓名搜索联系人"
-            android:maxLines="1"
-            android:textSize="15dp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-
-            <TextView
-                android:id="@+id/dialog"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerInParent="true"
-                android:background="#9DDE76"
-                android:gravity="center"
-                android:textColor="#ffffffff"
-                android:textSize="30dp"
-                android:visibility="invisible" />
-
-            <com.cimcitech.cimctd.widget.SideBar
-                android:id="@+id/sideBar"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="60dp"
-                android:background="@color/white"
-                android:layout_alignParentRight="true"
-                />
-        </RelativeLayout>
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
 
     <ImageButton
         android:id="@+id/add_ib"
@@ -109,4 +50,4 @@
         android:layout_marginBottom="20dp"
         android:layout_height="wrap_content"/>
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

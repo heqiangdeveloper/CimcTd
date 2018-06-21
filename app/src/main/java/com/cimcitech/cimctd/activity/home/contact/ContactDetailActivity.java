@@ -108,6 +108,8 @@ public class ContactDetailActivity extends MyBaseActivity {
     TextView contact_more_menu_delete_Tv;
     @Bind(R.id.contact_more_menu_invalid)
     TextView contact_more_menu_invalid_Tv;
+    @Bind(R.id.contact_more_menu_finish)
+    TextView contact_more_menu_finish_Tv;
     @Bind(R.id.titleName_tv)
     TextView titleName_Tv;
     @Bind(R.id.custName_red_tv)
@@ -165,15 +167,24 @@ public class ContactDetailActivity extends MyBaseActivity {
             contact_more_menu_invalid_Tv.setVisibility(View.VISIBLE);
             contact_more_menu_delete_Tv.setVisibility(View.VISIBLE);
         }
-        //初始化日历选择器
-        final Calendar ca = Calendar.getInstance();
-        mYear = ca.get(Calendar.YEAR);
-        mMonth = ca.get(Calendar.MONTH);
-        mDay = ca.get(Calendar.DAY_OF_MONTH);
-
+        contact_more_menu_finish_Tv.setVisibility(View.GONE);
         mLoading.show();
         getEnumData();//获取下拉数据
         initViewData();
+
+        //初始化日历选择器
+        if(birthday_Tv.getText().toString().trim().length() == 0){
+            final Calendar ca = Calendar.getInstance();
+            mYear = ca.get(Calendar.YEAR);
+            mMonth = ca.get(Calendar.MONTH);
+            mDay = ca.get(Calendar.DAY_OF_MONTH);
+        }else {
+            String dateStr = birthday_Tv.getText().toString().trim();
+            String [] dateStrs = dateStr.split("-");
+            mYear = Integer.parseInt(dateStrs[0]);
+            mMonth = Integer.parseInt(dateStrs[1]) - 1;
+            mDay = Integer.parseInt(dateStrs[2]);
+        }
     }
 
     @Override

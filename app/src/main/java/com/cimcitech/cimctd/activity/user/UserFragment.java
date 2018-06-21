@@ -64,9 +64,6 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class UserFragment extends Fragment {
-
-    @Bind(R.id.back_rl)
-    LinearLayout backRl;
     @Bind(R.id.about_tv)
     TextView aboutTv;
     @Bind(R.id.clear_cache_linear)
@@ -131,7 +128,7 @@ public class UserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_user, container, false);
+        View view = inflater.inflate(R.layout.activity_user_coordinatorlayout, container, false);
         ButterKnife.bind(this, view);
         sp = getActivity().getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
         getUserInfo();

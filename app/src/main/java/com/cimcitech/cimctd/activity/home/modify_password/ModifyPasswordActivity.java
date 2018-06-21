@@ -1,12 +1,20 @@
 package com.cimcitech.cimctd.activity.home.modify_password;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
@@ -20,6 +28,8 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.interfaces.RSAKey;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,7 +38,7 @@ import okhttp3.Call;
 public class ModifyPasswordActivity extends MyBaseActivity {
 
     @Bind(R.id.back_rl)
-    RelativeLayout backRl;
+    ImageView backRl;
     @Bind(R.id.old_psd_tv)
     EditText old_psd_Tv;
     @Bind(R.id.new_psd_tv1)
@@ -45,6 +55,56 @@ public class ModifyPasswordActivity extends MyBaseActivity {
         setContentView(R.layout.activity_modify_psd);
         ButterKnife.bind(this);
         sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);//如果存在则打开它，否则创建新的Preferences
+
+        commit_Bt.setClickable(false);
+        addTextWatcher(old_psd_Tv);
+        addTextWatcher(new_psd_Tv1);
+        addTextWatcher(new_psd_Tv2);
+
+        old_psd_Tv.setText("");
+        new_psd_Tv1.setText("");
+        new_psd_Tv2.setText("");
+        //键盘的弹出跟手机有关，有的手机即使加了如下代码，键盘依旧不弹出
+        /*InputMethodManager imm = (InputMethodManager) getSystemService(Context
+                .INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);*/
+    }
+
+    public void addTextWatcher(EditText et ){
+        et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(old_psd_Tv.getText().toString().trim().length() != 0 &&
+                        new_psd_Tv1.getText().toString().trim().length() != 0 &&
+                        new_psd_Tv2.getText().toString().trim().length() != 0){
+                    commitBtnOn();
+                }else{
+                    commitBtnOff();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    public void commitBtnOn(){
+        commit_Bt.setBackgroundResource(R.drawable.shape_modify_psd_button_on);
+        commit_Bt.setClickable(true);
+        commit_Bt.setTextColor(Color.WHITE);
+    }
+
+    public void commitBtnOff(){
+        commit_Bt.setBackgroundResource(R.drawable.shape_modify_psd_button_off);
+        commit_Bt.setClickable(false);
+        commit_Bt.setTextColor(Color.parseColor("#CECECE"));
     }
 
     @OnClick({R.id.commit_bt,R.id.back_rl})
@@ -54,13 +114,15 @@ public class ModifyPasswordActivity extends MyBaseActivity {
                 finish();
                 break;
             case R.id.commit_bt:
-                //格式检查
-                if(!checkInput()){
-                    return;
+                if(commit_Bt.isClickable()){
+                    //格式检查
+                    if(!checkInput()){
+                        return;
+                    }
+                    mLoading.show();
+                    //提交至服务器
+                    commitData(Config.userId,new_psd_Tv2.getText().toString().trim());
                 }
-                mLoading.show();
-                //提交至服务器
-                commitData(Config.userId,new_psd_Tv2.getText().toString().trim());
                 break;
         }
     }
@@ -81,7 +143,8 @@ public class ModifyPasswordActivity extends MyBaseActivity {
             Toast.makeText(ModifyPasswordActivity.this,"请再次输入新密码",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(Config.password.length() != 0 && !oldPsd.equals(Config.password)){
+        String password = RSAUtils.decrypt(sp.getString("password",""), Config.STR_PRI_KEY);//解密原始密码
+        if(password.length() != 0 && !oldPsd.equals(password)){
             Toast.makeText(ModifyPasswordActivity.this,"原密码错误，请确认！",Toast.LENGTH_SHORT).show();
             return false;
         }

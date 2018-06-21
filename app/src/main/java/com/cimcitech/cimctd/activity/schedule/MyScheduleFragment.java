@@ -179,17 +179,20 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         if (year == calendar.get(Calendar.YEAR) &&
                 month == calendar.get(Calendar.MONTH) &&
                 day == calendar.get(Calendar.DAY_OF_MONTH)) {
-            tvTitleMonth.setText(mMonthText[month]);
+            //tvTitleMonth.setText(mMonthText[month]);
             tvTitleDay.setText(getString(R.string.calendar_today));
         } else {
             if (year == calendar.get(Calendar.YEAR)) {
-                tvTitleMonth.setText(mMonthText[month]);
+                //tvTitleMonth.setText(mMonthText[month]);
             } else {
-                tvTitleMonth.setText(String.format("%s%s", String.format(getString(R.string.calendar_year), year),
-                        mMonthText[month]));
+                //tvTitleMonth.setText(String.format("%s%s", String.format(getString(R.string.calendar_year), year),
+                //        mMonthText[month]));
             }
             tvTitleDay.setText(String.format(getString(R.string.calendar_day), day));
         }
+        //显示年月
+        tvTitleMonth.setText(String.format("%s%s", String.format(getString(R.string.calendar_year), year),
+                       mMonthText[month]));
         setCurrentSelectDate(year, month, day);
     }
 

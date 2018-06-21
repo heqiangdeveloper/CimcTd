@@ -1,4 +1,9 @@
 <resources>
+    <dimen name="bottombar_padding">5dp</dimen>
+    <dimen name="bottombar_item_margin_top">0dp</dimen>
+    <dimen name="bottombar_item_text_size">12sp</dimen>
+    <dimen name="schedule_title_margin">10dp</dimen>
+    <dimen name="modify_psd_btn_margin">30dp</dimen>
     <dimen name="search_bar_margin">10dp</dimen>
     <dimen name="contact_detail_text_margin_right">22dp</dimen>
     <dimen name="contact_detail_drawable_padding">10dp</dimen>
@@ -57,6 +62,7 @@
     <dimen name="text_size_20sp">20sp</dimen>
 
     <dimen name="schedule_item_size">50dp</dimen>
+    <dimen name="schedule_content_size">100dp</dimen>
     <dimen name="schedule_radius_size">4dp</dimen>
     <dimen name="schedule_hint_dash_line_width">1dp</dimen>
     <dimen name="schedule_hint_dash_width">4dp</dimen>
@@ -64,7 +70,7 @@
     <dimen name="schedule_button_radius_size">3dp</dimen>
     <dimen name="schedule_item_center_size">50dp</dimen>
 
-    <dimen name="space_3dp">3dp</dimen>
+    <dimen name="space_3dp">0dp</dimen>
     <dimen name="space_6dp">6dp</dimen>
     <dimen name="space_8dp">8dp</dimen>
     <dimen name="space_10dp">10dp</dimen>

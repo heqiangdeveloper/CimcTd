@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="tab_normal_color">#515051</color>
+    <color name="tab_selected_color">#D33D3C</color>
+
+    <color name="unreadTextColor">#00ff00</color>
+    <color name="msgTextColor">#00ff00</color>
+
     <color name="contact_detail_more_item_clicked">#F0F0F0</color>
     <color name="colorPrimary2">#3DA7F7</color>
     <color name="colorPrimaryDark2">#3DA7F7</color>

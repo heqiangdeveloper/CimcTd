@@ -50,8 +50,6 @@ public class ContactActivity extends MyBaseActivity {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    @Bind(R.id.add_ib)
-    ImageButton add_ib;
     @Bind(R.id.sideBar)
     SideBar sideBar;
     @Bind(R.id.dialog)

@@ -132,6 +132,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     "禁用":"启用");
             ((ItemViewHolder) holder).isState_Tv.setTextColor(item.getIsState() == 1?
                     Color.RED:Color.GREEN);
+            ((ItemViewHolder) holder).isState_Tv.setVisibility(View.GONE);
 
             String nameIconStr = getNameStr(item.getContactName());
             ((ItemViewHolder) holder).icon_Tv.setText(nameIconStr);
@@ -197,6 +198,13 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     static class FootViewHolder extends RecyclerView.ViewHolder {
 
         public FootViewHolder(View view) {
+            super(view);
+        }
+    }
+
+    static class HeadViewHolder extends RecyclerView.ViewHolder {
+
+        public HeadViewHolder(View view) {
             super(view);
         }
     }

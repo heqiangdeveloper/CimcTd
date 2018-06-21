@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
-    android:orientation="vertical">
+    android:background="@color/transparent"
+    android:orientation="vertical"
+         android:theme="@style/AppTheme.AppBarOverlay"
+         app:elevation="0dp"
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/back_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        android:fitsSystemWindows="true">
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
             android:layout_width="80dp"
@@ -21,7 +29,8 @@
             circleimageview:border_overlay="false"
             circleimageview:border_color="#FF000000"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/user_fragment_top_margin"/>
+            android:layout_marginTop="@dimen/user_fragment_top_margin"
+            android:fitsSystemWindows="true"/>
 
         <TextView
             android:id="@+id/userName_tv"
@@ -33,32 +42,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/contact_detail_label_size"
             android:layout_marginBottom="@dimen/user_fragment_top_margin"/>
-    </LinearLayout>
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dip"
-            android:text="当前账号"
-            android:textColor="@color/black"
-            android:textSize="@dimen/contact_detail_label_size" />
-
-        <TextView
-            android:id="@+id/user_name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dip"
-            android:text="当前账号"
-            android:textColor="@color/alpha80"
-            android:textSize="15sp" />
-    </LinearLayout>-->
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/clear_cache_linear"
@@ -146,4 +130,4 @@
         android:text="退出当前账号"
         android:textColor="@color/red"
         android:textSize="@dimen/contact_detail_label_size" />
-</LinearLayout>
+</android.support.design.widget.AppBarLayout>

@@ -33,6 +33,8 @@ public class Config {
 
     public static Schedule scheduleConfig = null;
 
+    public static String operate = "";
+
 
     public static String PUBLIC_KEY =
             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDqB+OB1GMmNsOushhd3nHKO3OsextO+UYjtxUBLViHIQ"
