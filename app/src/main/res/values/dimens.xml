@@ -1,4 +1,7 @@
 <resources>
+    <dimen name="message_title_padding_top">10dp</dimen>
+    <dimen name="message_title_padding_bottom">10dp</dimen>
+    <dimen name="message_title_label_margin">5dp</dimen>
     <dimen name="bottombar_padding">5dp</dimen>
     <dimen name="bottombar_item_margin_top">0dp</dimen>
     <dimen name="bottombar_item_text_size">12sp</dimen>
@@ -11,6 +14,7 @@
     <dimen name="user_fragment_user_name_margin">5dp</dimen>
     <dimen name="contact_detail_more_menu_item_padding">10dp</dimen>
     <dimen name="contact_detail_label_size">18sp</dimen>
+    <dimen name="message_top_item_text_size">14sp</dimen>
     <dimen name="contact_adapter_size">18sp</dimen>
     <dimen name="contact_add_size">18sp</dimen>
     <dimen name="contact_adapter_cust_size">16sp</dimen>
@@ -44,7 +48,7 @@
     <dimen name="customer_top10_linear_padding">5dp</dimen>
     <dimen name="report_title_margin">40dp</dimen>
 
-    <dimen name="action_bar_height">48dp</dimen>
+    <dimen name="action_bar_height">50dp</dimen>
     <dimen name="bottom_bar_height">56dp</dimen>
     <dimen name="line_height">0.5dp</dimen>
 

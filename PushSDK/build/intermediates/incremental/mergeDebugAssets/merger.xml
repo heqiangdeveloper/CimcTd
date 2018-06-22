@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="E:\20180322\CimcTd_v4_0612_add_schedule_v3\PushSDK\assets"/><source path="E:\20180322\CimcTd_v4_0612_add_schedule_v3\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="E:\20180322\CimcTd_v4_0612_add_schedule_v3\PushSDK\build-types\debug\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="E:\20180322\CimcTd_v5_0621_add_message_title\PushSDK\assets"/><source path="E:\20180322\CimcTd_v5_0621_add_message_title\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="E:\20180322\CimcTd_v5_0621_add_message_title\PushSDK\build-types\debug\assets"/></dataSet></merger>
