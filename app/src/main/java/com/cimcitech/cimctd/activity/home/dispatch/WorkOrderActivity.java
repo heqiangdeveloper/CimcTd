@@ -27,6 +27,10 @@ import butterknife.OnClick;
 public class WorkOrderActivity extends MyBaseActivity {
     @Bind(R.id.custName_tv)
     TextView custName_tv;
+    @Bind(R.id.titleName_tv)
+    TextView titleName_Tv;
+    @Bind(R.id.more_tv)
+    TextView more_Tv;
 
     private int pageNum = 1;
     private DispatchVo dispatchVo;
@@ -45,9 +49,14 @@ public class WorkOrderActivity extends MyBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_hb_bill);
         ButterKnife.bind(this);
-
+        setTitle();
         dispatch = (Dispatch) getIntent().getSerializableExtra("dispatch");
         initView();
+    }
+
+    public void setTitle(){
+        titleName_Tv.setText("登机桥定检表");
+        more_Tv.setVisibility(View.GONE);
     }
 
     public void initView(){
@@ -63,10 +72,10 @@ public class WorkOrderActivity extends MyBaseActivity {
         }
     }
 
-    @OnClick({R.id.back_rl})
+    @OnClick({R.id.back})
     public void onclick(View view) {
         switch (view.getId()) {
-            case R.id.back_rl:
+            case R.id.back:
                 finish();
                 break;
         }
@@ -77,7 +86,5 @@ public class WorkOrderActivity extends MyBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(WorkOrderActivity.this, DispatchActivity.class));
-        finish();
     }
 }

@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.bean.contact.Contact;
 import com.cimcitech.cimctd.bean.contact.Customer;
-import com.cimcitech.cimctd.bean.contact.LettersCustomer;
 
 import java.util.List;
 
@@ -26,13 +24,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    private List<LettersCustomer> data;
+    private List<Customer> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
     private Context context;
 
-    public CustomerAdapter(Context context, List<LettersCustomer> data) {
+    public CustomerAdapter(Context context, List<Customer> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -84,7 +82,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
-            final LettersCustomer item = data.get(position);
+            final Customer item = data.get(position);
             if (onItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -182,7 +180,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      * 提供给Activity刷新数据
      * @param list
      */
-    public void updateList(List<LettersCustomer> list){
+    public void updateList(List<Customer> list){
         this.data = list;
         notifyDataSetChanged();
     }

@@ -11,6 +11,15 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        ndk {
+            //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "363bc312d960983146c4d718", //JPush上注册的包名对应的appkey（*换成你的*）
+                JPUSH_CHANNEL: "developer-default" //暂时填写默认值即可.
+        ]
     }
     buildTypes {
         release {
@@ -23,7 +32,6 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-
     configurations.all {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             def requested = details.requested
@@ -33,6 +41,10 @@ android {
                 }
             }
         }
+    }
+    aaptOptions{
+        cruncherEnabled = false
+        useNewCruncher = false
     }
 }
 
@@ -54,7 +66,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     testCompile 'junit:junit:4.12'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
-    compile project(':PushSDK')
     compile project(':calendar')
     compile project(':common')
     compile files('libs/BASE64Encoder.jar')
@@ -62,4 +73,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile files('libs/pinyin4j-2.5.0.jar')
     compile 'com.github.chaychan:BottomBarLayout:1.1.2'
+    compile 'cn.jiguang:jpush:2.1.8'
 }

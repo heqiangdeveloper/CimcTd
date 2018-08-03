@@ -13,12 +13,6 @@ import com.jimmy.common.bean.Schedule;
 
 public class Config {
 
-    public static String AppAuthStr = "";
-
-    public static  String  userName = "";//用户登录名
-
-    public static  String  realName = "";//用户真实的姓名
-
     public static  boolean isLeader = false;
 
     public static boolean isLogin = false;
@@ -35,6 +29,7 @@ public class Config {
 
     public static String operate = "";
 
+    public static int unReadMsg = 0;
 
     public static String PUBLIC_KEY =
             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDqB+OB1GMmNsOushhd3nHKO3OsextO+UYjtxUBLViHIQ"
@@ -50,8 +45,6 @@ public class Config {
                     + "JuHRCwZQvVNbg27wJAGS23EC6nqYBe2S3K6SfEheMbzJVnHvnEtIZyRneQE1rgKicKrXuGaOLoXsb2OnZc2dRgGTQK0RlOfiB4+7PKmQJBAJqmete39"
                     + "YPDMQdQCUeuIl1Mt/68goYZvOMeXgHAObD47g0G9jDXSWitYvKpU8Ad+DNaiZLQjcHX2OOcKeRuqzA=";
     public static Context context;
-    public static String password;
-    public static Long userId;
 
     public static boolean isUserNameVaild = false;
 
@@ -64,7 +57,7 @@ public class Config {
     public static boolean isFollowUp = false;
     public static boolean isAddWork = false;
     public static boolean isQuotedPrice = false;
-    public static int type = 1; //周报类型  1.今天 2.本周 3.历史
+    public static int type = 0; //消息类型 0:全部 1：已接单 2：未接单
 
     //public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 

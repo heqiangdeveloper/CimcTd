@@ -132,6 +132,86 @@ public class LoginActivity extends MyBaseActivity {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);//不能省
+        userNameTv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(userNameTv.getText().toString().trim().length() != 0 &&
+                        passwordTv.getText().toString().trim().length() != 0){
+                    loginBtnOn();
+                }else{
+                    loginBtnOff();
+                }
+                if(userNameTv.getText().toString().trim().length() != 0 &&
+                        sp.getString("user_name", "").length() != 0 &&
+                        userNameTv.getText().toString().trim().equals(sp.getString("user_name", ""))){
+                    welcome_Tv1.setVisibility(View.VISIBLE);
+                    welcome_Tv2.setVisibility(View.VISIBLE);
+                    welcome_Tv1.setText("Hello!  " + sp.getString("user_name", ""));
+                    welcome_Tv2.setText("欢迎回来");
+                }else{
+                    welcome_Tv1.setVisibility(View.INVISIBLE);
+                    welcome_Tv2.setVisibility(View.VISIBLE);
+                    welcome_Tv2.setText("欢迎使用管理平台");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        passwordTv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(userNameTv.getText().toString().trim().length() != 0 &&
+                        passwordTv.getText().toString().trim().length() != 0){
+                    loginBtnOn();
+                }else{
+                    loginBtnOff();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //如果是已登录过的，直接跳过登录界面
+        if(sp.getString("user_name","").length() != 0 &&
+                sp.getString("password","").length() != 0 &&
+                sp.getString("realName","").length() != 0 &&
+                sp.getLong("userId",0) != 0){
+            Intent intent2 = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent2);
+            finish();
+        }else{
+            if (sp.getString("user_name", "") != "") {
+                userNameTv.setText(sp.getString("user_name", ""));
+            }else{
+                userNameTv.setText("");
+            }
+            passwordTv.setText("");
+            if(userNameTv.getText().toString().trim().length() != 0){
+                userNameTv.setSelection(userNameTv.getText().toString().trim().length());
+            }
+        }
+    }
+
     public void loginBtnOn(){
         loginBt.setBackgroundResource(R.drawable.shape_login_button_on);
         loginBt.setClickable(true);
@@ -250,10 +330,6 @@ public class LoginActivity extends MyBaseActivity {
 
                                                 //Config.isLeader = loginVo.getData().getAppAuth()
                                                 //.equals("Y")? true:false;
-                                                Config.userName = userNameTv.getText().toString().trim();
-                                                Config.realName = loginVo.getData().getRealname();
-                                                Config.password = passwordTv.getText().toString().trim();
-                                                Config.userId = loginVo.getData().getUserId();
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 //String s = loginVo.getData().getAppAuth();
                                                 //intent.putExtra("AppAuth", s);

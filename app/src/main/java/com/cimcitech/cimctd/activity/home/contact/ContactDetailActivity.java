@@ -29,11 +29,11 @@ import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.adapter.PopupWindowAdapter;
+import com.cimcitech.cimctd.bean.contact.Contact;
 import com.cimcitech.cimctd.bean.contact.ContactAddReq;
 import com.cimcitech.cimctd.bean.contact.ContactEnumVo;
 import com.cimcitech.cimctd.bean.contact.ContactModifyReq;
-import com.cimcitech.cimctd.bean.contact.LettersContact;
-import com.cimcitech.cimctd.bean.contact.LettersCustomer;
+import com.cimcitech.cimctd.bean.contact.Customer;
 import com.cimcitech.cimctd.bean.file_search.MyFile;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.DateTool;
@@ -121,8 +121,8 @@ public class ContactDetailActivity extends MyBaseActivity {
     private boolean isLoading;
     private boolean myData = true;
     private String TAG = "fileSearchlog";
-    private LettersContact lettersContact;
-    private LettersCustomer lettersCustomer;
+    private Contact contact;
+    private Customer customer;
     private PopupWindow pop;
     private int intValue = 0;
     private List list;
@@ -160,7 +160,7 @@ public class ContactDetailActivity extends MyBaseActivity {
         }else {
             custName_red_Tv.setVisibility(View.VISIBLE);
             custName_Tv.setClickable(false);
-            lettersContact = (LettersContact)getIntent().getSerializableExtra("LettersContact");
+            contact = (Contact)getIntent().getSerializableExtra("LettersContact");
             titleName_Tv.setText("联系人信息详情");
             contact_more_menu_add_Tv.setVisibility(View.GONE);
             contact_more_menu_save_Tv.setVisibility(View.VISIBLE);
@@ -194,8 +194,8 @@ public class ContactDetailActivity extends MyBaseActivity {
             //注意不能使用下面这段代码，这是接收startActivity()方法的代码
             //lettersCustomer = (LettersCustomer) getIntent().getSerializableExtra
             //        ("lettersCustomer");
-            lettersCustomer = (LettersCustomer)data.getSerializableExtra("lettersCustomer");
-            custName_Tv.setText(lettersCustomer.getCustName());
+            customer = (Customer)data.getSerializableExtra("lettersCustomer");
+            custName_Tv.setText(customer.getCustName());
         }
     }
 
@@ -210,26 +210,25 @@ public class ContactDetailActivity extends MyBaseActivity {
 
     public void initViewData() {
         if(!isAdd){
-            createTime_Tv.setText(lettersContact.getCreateTime() != null?DateTool.getDateStr(lettersContact
+            createTime_Tv.setText(contact.getCreateTime() != null?DateTool.getDateStr(contact
                     .getCreateTime()):"");
-            contactName_Et.setText(lettersContact.getContactName());
-            custName_Tv.setText(lettersContact.getCustName());
-            deptName_Et.setText(lettersContact.getDeptName());
-            duties_Et.setText(lettersContact.getDuties());
-            tel_Et.setText(lettersContact.getTel());
-            email_Et.setText(lettersContact.getEmail());
-            fax_Et.setText(lettersContact.getFax());
-            birthday_Tv.setText(lettersContact.getBirthday() != null?DateTool.getDateStr(lettersContact.getBirthday
-                    ()):"");
-            internalRelaValue_Tv.setText(lettersContact.getInternalRelaValue());
-            relationLevelValue_Tv.setText(lettersContact.getRelationLevelValue());
-            hobbies_Et.setText(lettersContact.getHobbies());
-            sex_Tv.setText(lettersContact.getSex().equals("1")?"男":"女");
-            addr1_Et.setText(lettersContact.getAddr1());
-            addr2_Et.setText(lettersContact.getAddr2());
-            remark_Et.setText(lettersContact.getRemark());
-            isPass_Tv.setText(lettersContact.getIsPass() == 1?"是":"否");//1：确认，0：未确认
-            isState_Tv.setText(lettersContact.getIsState() == 1?"禁用":"启用");//1:禁用，0：启用
+            contactName_Et.setText(contact.getContactName());
+            custName_Tv.setText(contact.getCustName());
+            deptName_Et.setText(contact.getDeptName());
+            duties_Et.setText(contact.getDuties());
+            tel_Et.setText(contact.getTel());
+            email_Et.setText(contact.getEmail());
+            fax_Et.setText(contact.getFax());
+            birthday_Tv.setText(contact.getBirthday() != null?DateTool.getDateStr(contact.getBirthday()):"");
+            internalRelaValue_Tv.setText(contact.getInternalRelaValue());
+            relationLevelValue_Tv.setText(contact.getRelationLevelValue());
+            hobbies_Et.setText(contact.getHobbies());
+            sex_Tv.setText(contact.getSex().equals("1")?"男":"女");
+            addr1_Et.setText(contact.getAddr1());
+            addr2_Et.setText(contact.getAddr2());
+            remark_Et.setText(contact.getRemark());
+            isPass_Tv.setText(contact.getIsPass() == 1?"是":"否");//1：确认，0：未确认
+            isState_Tv.setText(contact.getIsState() == 1?"禁用":"启用");//1:禁用，0：启用
         }else{
             createTime_Tv.setText(DateTool.getDateStr(System.currentTimeMillis()));
             //custName_Tv.setText(lettersCustomer.getCustName());
@@ -241,7 +240,7 @@ public class ContactDetailActivity extends MyBaseActivity {
     }
 
     @OnClick({R.id.back,R.id.sex_tv,R.id.isPass_tv,R.id.isState_tv,R.id.internalRelaValue_tv,R.id
-            .relationLevelValue_tv,R.id.birthday_tv,R.id.more_iv,R.id.contact_more_menu_delete,
+            .relationLevelValue_tv,R.id.birthday_tv,R.id.more_tv,R.id.contact_more_menu_delete,
             R.id.contact_more_menu_invalid,R.id.contact_more_menu_save,R.id.contact_more_menu_add,
             R.id.custName_tv})
     public void onclick(View view) {
@@ -307,7 +306,7 @@ public class ContactDetailActivity extends MyBaseActivity {
             case R.id.birthday_tv:
                 showDialog(DATE_DIALOG);
                 break;
-            case R.id.more_iv://更多
+            case R.id.more_tv://更多
                 showPopupMenu();
                 break;
             case R.id.contact_more_menu_add:
@@ -592,8 +591,8 @@ public class ContactDetailActivity extends MyBaseActivity {
     //添加联系人
     public void commitData() {
         Long contactId = null;
-        Long custId = lettersCustomer.getCustId();
-        String custName = lettersCustomer.getCustName();
+        Long custId = customer.getCustId();
+        String custName = customer.getCustName();
         String contactName = contactName_Et.getText().toString().trim();
         String sex = sex_Tv.getText().toString().trim();
         String deptName = deptName_Et.getText().toString().trim();
@@ -702,8 +701,8 @@ public class ContactDetailActivity extends MyBaseActivity {
 
     //修改联系人
     public void saveData(){
-        Long contactId = lettersContact.getContactId();
-        Long custId = lettersContact.getCustId();
+        Long contactId = contact.getContactId();
+        Long custId = contact.getCustId();
         String custName = custName_Tv.getText().toString().trim();
         String contactName = contactName_Et.getText().toString().trim();
         String sex = sex_Tv.getText().toString().trim().equals("男")?"1":"0";
@@ -729,9 +728,9 @@ public class ContactDetailActivity extends MyBaseActivity {
         String addr1 = addr1_Et.getText().toString().trim();
         String addr2 = addr2_Et.getText().toString().trim();
         int isPass = isPass_Tv.getText().toString().trim().equals("是")?1:0;
-        Long creater = lettersContact.getCreater();
-        String createName = lettersContact.getCreateName();
-        Long createTime = lettersContact.getCreateTime();
+        Long creater = contact.getCreater();
+        String createName = contact.getCreateName();
+        Long createTime = contact.getCreateTime();
         //Long updater = Config.userId;
         //String updateName = Config.realName;
         sp = getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
@@ -825,7 +824,7 @@ public class ContactDetailActivity extends MyBaseActivity {
 
     //作废
     public void invalidData(){
-        Long contactId = lettersContact.getContactId();
+        Long contactId = contact.getContactId();
         OkHttpUtils
                 .get()
                 .url(Config.UPDATE_CONTACT_STATE_URL)
@@ -868,7 +867,7 @@ public class ContactDetailActivity extends MyBaseActivity {
 
     //删除联系人
     public void deleteData(){
-        Long contactId = lettersContact.getContactId();
+        Long contactId = contact.getContactId();
         //String json = new Gson().toJson(new ContactDeleteReq(contactId));
         //注意：这里采用post方式，传递的是Params，而不是json,即POST  http://localhost:8080/tdsh/contact/deleteContact?contactId=1
         OkHttpUtils

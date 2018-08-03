@@ -59,6 +59,15 @@ public class Contact implements Serializable{
     private  String  updateName;
     private  Long  updateTime;
     private  String  updater;
+    private String letters;//姓名的标识
+
+    public String getLetters() {
+        return letters;
+    }
+
+    public void setLetters(String letters) {
+        this.letters = letters;
+    }
 
     public String getAddr1() {
         return addr1;

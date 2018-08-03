@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.bean.contact.Contact;
-import com.cimcitech.cimctd.bean.contact.LettersContact;
-
 import java.util.List;
 
 /**
@@ -27,13 +25,13 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    private List<LettersContact> data;
+    private List<Contact> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
     private Context context;
 
-    public ContactAdapter(Context context, List<LettersContact> data) {
+    public ContactAdapter(Context context, List<Contact> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -86,7 +84,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
-            final LettersContact item = data.get(position);
+            final Contact item = data.get(position);
             if (onItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -234,7 +232,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * 提供给Activity刷新数据
      * @param list
      */
-    public void updateList(List<LettersContact> list){
+    public void updateList(List<Contact> list){
         this.data = list;
         notifyDataSetChanged();
     }

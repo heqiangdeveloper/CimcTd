@@ -1,6 +1,7 @@
 package com.cimcitech.cimctd.activity.home.dispatch;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.adapter.dispatch.DispatchAdapter;
@@ -43,25 +45,18 @@ import okhttp3.MediaType;
  */
 
 public class DispatchActivity extends MyBaseActivity {
-    @Bind(R.id.sale_view)
-    View sale_View;
-    @Bind(R.id.main_view)
-    View main_View;
-    @Bind(R.id.title_ll)
-    LinearLayout titleLl;
     @Bind(R.id.isReceive_spinner)
     Spinner isReceive_Spinner;
-    @Bind(R.id.search_bt)
-    Button searchBt;
-    @Bind(R.id.search_bar)
-    LinearLayout searchBar;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recycler_view_layout)
     CoordinatorLayout recyclerViewLayout;
-
+    @Bind(R.id.my_view)
+    View my_View;
+    @Bind(R.id.xs_view)
+    View xs_View;
 
     private int pageNum = 1;
     private DispatchVo dispatchVo;
@@ -73,24 +68,30 @@ public class DispatchActivity extends MyBaseActivity {
     private boolean isLoading;
     private boolean isSale = true;
     private String TAG = "dispatchlog";
-    private String isReceiveStr = "";
+    private int index = 0;
     private String isSendJobsStr = "";
+    private final String CONTRACTTYPESTR_SALE = "0";
+    private final String CONTRACTTYPESTR_MAIN = "1";
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dispatch);
         ButterKnife.bind(this);
+        sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
         initView();//初始化Spinner
         initViewData();//获取数据
-        getSaleData();
+        //getSaleData();
     }
 
     private void initView(){
         isReceive_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                isReceiveStr = (String) isReceive_Spinner.getAdapter().getItem(position);
+                //isReceiveStr = (String) isReceive_Spinner.getAdapter().getItem(position);
+                index = position;
+                updateData();
             }
 
             @Override
@@ -98,17 +99,6 @@ public class DispatchActivity extends MyBaseActivity {
 
             }
         });
-        /*isSendJobs_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                isSendJobsStr = (String) isSendJobs_Spinner.getAdapter().getItem(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
     }
 
     //刷新数据
@@ -138,28 +128,28 @@ public class DispatchActivity extends MyBaseActivity {
         }
     }
 
-    @OnClick({R.id.back, R.id.sale_tv, R.id.main_tv, R.id.search_bt})
+    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv})
     public void onclick(View view) {
         switch (view.getId()) {
-            case R.id.back:
+            case R.id.back_iv:
                 finish();
                 break;
-            case R.id.sale_tv:
+            case R.id.my_tv:
                 isSale = true;
-                sale_View.setVisibility(View.VISIBLE);
-                main_View.setVisibility(View.INVISIBLE);
+                my_View.setVisibility(View.VISIBLE);
+                xs_View.setVisibility(View.INVISIBLE);
                 updateData();
                 break;
-            case R.id.main_tv:
+            case R.id.xs_tv:
                 isSale = false;
-                sale_View.setVisibility(View.INVISIBLE);
-                main_View.setVisibility(View.VISIBLE);
+                my_View.setVisibility(View.INVISIBLE);
+                xs_View.setVisibility(View.VISIBLE);
                 updateData();
                 break;
-            case R.id.search_bt:
+            /*case R.id.search_bt:
                 updateData();
                 //ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                break;
+                break;*/
         }
     }
 
@@ -264,13 +254,13 @@ public class DispatchActivity extends MyBaseActivity {
         String json = new Gson().toJson(new SaleDispatchReq(pageNum,10,
                 null,
                 new saleMaintenPlanVo("isSend",
-                        getReceive(isReceiveStr),
+                        getReceive(index),
                         "all",
                         null,
                         null,
                         null,
                         null,
-                        Config.userId)));
+                        sp.getLong("userId",0))));
         Log.d(TAG,"json is: " + json);
         OkHttpUtils
                 .postString()
@@ -290,12 +280,15 @@ public class DispatchActivity extends MyBaseActivity {
                             @Override
                             public void onResponse(String response, int id) {
                                 if(mLoading.isShowing()) mLoading.dismiss();
+                                data.clear();
                                 dispatchVo = GjsonUtil.parseJsonWithGson(response, DispatchVo.class);
                                 if (dispatchVo != null) {
                                     if (dispatchVo.isSuccess()) {
                                         if (dispatchVo.getData().getList() != null && dispatchVo.getData().getList().size() > 0) {
                                             for (int i = 0; i < dispatchVo.getData().getList().size(); i++) {
-                                                data.add(dispatchVo.getData().getList().get(i));//.getData().getList().get(i)
+                                                Dispatch dispatch = dispatchVo.getData().getList().get(i);
+                                                dispatch.setContractType(CONTRACTTYPESTR_SALE);
+                                                data.add(dispatch);
                                             }
                                         }
                                         if (dispatchVo.getData().isHasNextPage()) {
@@ -324,13 +317,13 @@ public class DispatchActivity extends MyBaseActivity {
                 10,
                 "createTime desc",
                 new MaintenancePlanVo("isSend",
-                        getReceive(isReceiveStr),
+                        getReceive(index),
                         "all",
                         null,
                         null,
                         null,
                         null,
-                        Config.userId)));
+                        sp.getLong("userId",0))));
         Log.d(TAG,"json2 is: " + json1);
         OkHttpUtils
                 .postString()
@@ -355,7 +348,9 @@ public class DispatchActivity extends MyBaseActivity {
                                     if (dispatchVo.isSuccess()) {
                                         if (dispatchVo.getData().getList() != null && dispatchVo.getData().getList().size() > 0) {
                                             for (int i = 0; i < dispatchVo.getData().getList().size(); i++) {
-                                                data.add(dispatchVo.getData().getList().get(i));//.getData().getList().get(i)
+                                                Dispatch dispatch = dispatchVo.getData().getList().get(i);
+                                                dispatch.setContractType(CONTRACTTYPESTR_MAIN);
+                                                data.add(dispatch);
                                             }
                                         }
                                         if (dispatchVo.getData().isHasNextPage()) {
@@ -395,16 +390,16 @@ public class DispatchActivity extends MyBaseActivity {
         return s;
     }
 
-    public String getReceive(String str){
+    public String getReceive(int index){
         String s = "";
-        switch (str){
-            case "所有状态":
+        switch (index){
+            case 0:
                 s = "all";
                 break;
-            case "已接收":
+            case 1:
                 s = "isReceive";
                 break;
-            case "未接收":
+            case 2:
                 s = "isNotReceive";
                 break;
             default:

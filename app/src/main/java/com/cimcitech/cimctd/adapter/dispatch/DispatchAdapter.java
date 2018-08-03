@@ -5,6 +5,7 @@ package com.cimcitech.cimctd.adapter.dispatch;
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,11 +104,15 @@ public class DispatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             final Dispatch item = data.get(position);
             ((ItemViewHolder) holder).custName_Tv.setText(item.getCustName() != null && !item
-                    .getCustName().equals("") ? "客户：" + item.getCustName():"客户：" + "");
+                    .getCustName().equals("") ? "" + item.getCustName():"" + "");
             ((ItemViewHolder) holder).contractNo_Tv.setText(item.getContractNo() != null && !item
-                    .getContractNo().equals("") ? "合同号：" + item.getContractNo() : "合同号：" + "");
-            ((ItemViewHolder) holder).isDispatch_Tv.setText(item.getChargeName() != null && !item
-                    .getChargeName().equals("")?"是":"否");
+                    .getContractNo().equals("") ? "" + item.getContractNo() : "" + "");
+            ((ItemViewHolder) holder).isDispatch_Tv.setText(item.getRecComfirmDate() != null ?
+                    context.getResources().getString(R.string.message_accept):
+                    context.getResources().getString(R.string.message_no_accept)
+            );
+            ((ItemViewHolder) holder).isDispatch_Tv.setTextColor(item.getRecComfirmDate() != null ?
+                    Color.GREEN : Color.RED);
         }
     }
 

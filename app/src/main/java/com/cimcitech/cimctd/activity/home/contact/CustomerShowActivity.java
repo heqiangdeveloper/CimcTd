@@ -21,7 +21,6 @@ import com.cimcitech.cimctd.bean.contact.Customer;
 import com.cimcitech.cimctd.bean.contact.CustomerBean;
 import com.cimcitech.cimctd.bean.contact.CustomerRequestBean;
 import com.cimcitech.cimctd.bean.contact.CustomerVo;
-import com.cimcitech.cimctd.bean.contact.LettersCustomer;
 import com.cimcitech.cimctd.bean.file_search.FileSearchVo;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.CustomerPinyinComparator;
@@ -59,7 +58,7 @@ public class CustomerShowActivity extends MyBaseActivity {
     private Handler handler = new Handler();
     private CustomerAdapter adapter;
     private FileSearchVo fileSearchVo;
-    private List<LettersCustomer> data = new ArrayList<LettersCustomer>();
+    private List<Customer> data = new ArrayList<Customer>();
     private int pageNum = 1;
     private boolean isLoading;
     private boolean myData = true;
@@ -164,8 +163,8 @@ public class CustomerShowActivity extends MyBaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(CustomerShowActivity.this, ContactDetailActivity.class);
-                LettersCustomer lettersCustomer = (LettersCustomer) adapter.getAll().get(position);
-                intent.putExtra("lettersCustomer",lettersCustomer);
+                Customer customer = (Customer) adapter.getAll().get(position);
+                intent.putExtra("lettersCustomer",customer);
                 //intent.putExtra("isAdd",true);
                 //startActivity(intent);
                 //startActivityForResult(intent,REQUESTCODE);
@@ -241,16 +240,10 @@ public class CustomerShowActivity extends MyBaseActivity {
                                             for (int i = 0; i < customerVo.getData().getList().size(); i++) {
                                                 //data.add(customerVo.getData().getList().get(i));
                                                 Customer mCustomer = customerVo.getData().getList().get(i);
-                                                LettersCustomer mLettersCustomer = transferToLettersCustomer
-                                                        (mCustomer);
-                                                data.add(setLetters(mLettersCustomer));
+                                                setLetters(mCustomer);
+                                                data.add(mCustomer);
                                             }
                                         }
-                                        /*if (customerVo.getData().isHasNextPage()) {
-                                            adapter.setNotMoreData(false);
-                                        } else {
-                                            adapter.setNotMoreData(true);
-                                        }*/
                                         adapter.setNotMoreData(true);
                                         adapter.notifyDataSetChanged();
                                         adapter.notifyItemRemoved(adapter.getItemCount());
@@ -263,52 +256,18 @@ public class CustomerShowActivity extends MyBaseActivity {
                         });
     }
 
-    public LettersCustomer transferToLettersCustomer(Customer mCustomer){
-        LettersCustomer mLettersCustomer = new LettersCustomer(
-                mCustomer.getCreateTime(),
-                mCustomer.getCreater(),
-                mCustomer.getCreaterName(),
-                mCustomer.getCustAddr(),
-                mCustomer.getCustCode(),
-                mCustomer.getCustId(),
-                mCustomer.getCustLevel(),
-                mCustomer.getCustLevelValue(),
-                mCustomer.getCustName(),
-                mCustomer.getCustTel(),
-                mCustomer.getEmail(),
-                mCustomer.getEstablished(),
-                mCustomer.getFax(),
-                mCustomer.getInvoice(),
-                mCustomer.getIsState(),
-                mCustomer.getJuridicalPerson(),
-                mCustomer.getMarketLeader(),
-                mCustomer.getProvinceId(),
-                mCustomer.getProvinceName(),
-                mCustomer.getRegionId(),
-                mCustomer.getRegionName(),
-                mCustomer.getRemark(),
-                mCustomer.getSalesName(),
-                mCustomer.getShortName(),
-                mCustomer.getSuperName(),
-                mCustomer.getTaxNumber(),
-                mCustomer.getUpdateTime(),
-                mCustomer.getUpdater()
-        );
-        return mLettersCustomer;
-    }
-
-    public LettersCustomer setLetters(LettersCustomer lettersCustomer){
+    public Customer setLetters(Customer customer){
         //汉字转换成拼音
-        String pinyin = PinyinUtils.getPingYin(lettersCustomer.getCustName());
+        String pinyin = PinyinUtils.getPingYin(customer.getCustName());
         String sortString = pinyin.substring(0, 1).toUpperCase();
 
         // 正则表达式，判断首字母是否是英文字母
         if (sortString.matches("[A-Z]")) {
-            lettersCustomer.setLetters(sortString.toUpperCase());
+            customer.setLetters(sortString.toUpperCase());
         } else {
-            lettersCustomer.setLetters("#");
+            customer.setLetters("#");
         }
-        return lettersCustomer;
+        return customer;
     }
 
     /**
@@ -317,21 +276,21 @@ public class CustomerShowActivity extends MyBaseActivity {
      * @param filterStr
      */
     private void filterData(String filterStr) {
-        List<LettersCustomer> filterDateList = new ArrayList<>();
+        List<Customer> filterDateList = new ArrayList<>();
 
         if (TextUtils.isEmpty(filterStr)) {
             filterDateList = data;
         } else {
             filterDateList.clear();
-            for (LettersCustomer lettersCustomer : data) {
-                String name = lettersCustomer.getCustName();
+            for (Customer customer : data) {
+                String name = customer.getCustName();
                 if (name.indexOf(filterStr.toString()) != -1 ||
                         PinyinUtils.getFirstSpell(name).startsWith(filterStr.toString())
                         //不区分大小写
                         || PinyinUtils.getFirstSpell(name).toLowerCase().startsWith(filterStr.toString())
                         || PinyinUtils.getFirstSpell(name).toUpperCase().startsWith(filterStr.toString())
                         ) {
-                    filterDateList.add(lettersCustomer);
+                    filterDateList.add(customer);
                 }
             }
         }

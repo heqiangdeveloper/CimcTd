@@ -166,7 +166,7 @@ public class UserFragment extends Fragment {
         switch (view.getId()) {
             case R.id.clear_cache_linear://清除缓存
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("提示")
+                        //.setTitle("提示")
                         .setMessage("是否要清除缓存？")
                         .setCancelable(true)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {

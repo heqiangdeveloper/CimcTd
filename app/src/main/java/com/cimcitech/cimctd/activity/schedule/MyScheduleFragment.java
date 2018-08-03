@@ -9,8 +9,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -21,25 +19,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.adapter.schedual.EventSetAdapter;
-import com.cimcitech.cimctd.fragment.EventSetFragment;
-import com.cimcitech.cimctd.fragment.ScheduleFragment;
 import com.cimcitech.cimctd.task.eventset.LoadEventSetTask;
-import com.cimcitech.cimctd.utils.Config;
 import com.jimmy.common.base.app.BaseFragment;
 import com.jimmy.common.bean.EventSet;
 import com.jimmy.common.listener.OnTaskFinishedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;

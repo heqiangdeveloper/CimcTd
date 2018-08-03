@@ -1,5 +1,11 @@
 package com.cimcitech.cimctd.activity.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -15,18 +21,27 @@ import android.widget.Toast;
 import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
 import com.cimcitech.cimctd.R;
+import com.cimcitech.cimctd.activity.message.MessageData;
+import com.cimcitech.cimctd.activity.message.MessageFragment;
 import com.cimcitech.cimctd.bean.AreaVo;
+import com.cimcitech.cimctd.task.message.QueryUnReadMessageTask;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
 import com.cimcitech.cimctd.utils.ToastUtil;
 import com.cimcitech.cimctd.widget.DataGenerator;
+import com.jimmy.common.listener.OnTaskFinishedListener;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 
 
@@ -40,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private long firstTime = 0;
 
     private BottomBarLayout mBottomBarLayout;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.cimcitech.cimctd.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
+    public int unReadMsg  = 0;
+    public IntentFilter filter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,61 +67,70 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         mFragments = DataGenerator.getFragments();
         mBottomBarLayout = (BottomBarLayout)findViewById(R.id.bbl);
-        // 将activity设置为全屏显示
 
         //appAuthString = this.getIntent().getStringExtra("AuthString");
         initView2();
         mBottomBarLayout.setSmoothScroll(true);
-        mBottomBarLayout.setUnread(0,100);
-        mBottomBarLayout.setUnread(1,26);
+
+        getUnreadMsg();
+        mBottomBarLayout.setUnread(1,0);
         mBottomBarLayout.showNotify(2);
         mBottomBarLayout.setMsg(3,"NEW");
 
-        //达到缓存的上限，就清理缓存
-        /*Runtime rt = Runtime.getRuntime();
-        long maxMemory = rt.maxMemory();//该手机分配给每个APP的最大内存
-        Log.i("heqmom", Long.toString(maxMemory / (1024 * 1024)));
-        DataCleanManager manager = new DataCleanManager();
-        long maxCache = maxMemory / 8;//缓存的上限
-        try {
-            long currentCache = manager.getFolderSize(getApplication().getCacheDir());
-            if (currentCache >= maxCache) {
-                manager.clearAllCache(getApplication());
-            }
-        } catch (Exception e) {
+        //设置极光推送
+        //初始化sdk
+        JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试
+        JPushInterface.init(this);
+        //建议添加tag标签，发送消息的之后就可以指定tag标签来发送了
+        Set<String> set = new HashSet<>();
+        set.add("xiaomi");//名字任意，可多添加几个
+        set.add("alcatel");
+        set.add("huawei");
+        JPushInterface.setTags(this, set, null);//设置标签
 
-        }*/
+        String content = getIntent().getStringExtra("content");
+        if (null != content && !content.equals("")){
+            mBottomBarLayout.getBottomItem(0).callOnClick();//选中消息页
+        }
+        registRefreshReceiver();
     }
 
-    private void initView() {
-        /*mRadioGroup = (RadioGroup) findViewById(R.id.radio_group_button);
-        mRadioButtonHome = (RadioButton) findViewById(R.id.radio_button_home);
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            Fragment mFragment = null;
+    public void registRefreshReceiver(){
+        filter = new IntentFilter();
+        filter.addAction(MessageFragment.REFRESH_UNREADMSG_BROADCAST);
+        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(refreshReceiver,filter);
+    }
 
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId) {
-                    case R.id.radio_button_message:
-                        //mFragment = Config.isLeader ? mFragments[4] : mFragments[0];
-                        mFragment = mFragments[0];
-                        break;
-                    case R.id.radio_button_home:
-                        mFragment = mFragments[1];
-                        break;
-                    case R.id.radio_button_schedule:
-                        mFragment = mFragments[2];
-                        break;
-                    case R.id.radio_button_user:
-                        mFragment = mFragments[3];
-                        break;
-                }
-                if (mFragments != null) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.home_container, mFragment).commit();
-                }
+    public BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(MessageFragment.REFRESH_UNREADMSG_BROADCAST)){
+                getUnreadMsg();
             }
-        });
-        mRadioButtonHome.setChecked(true);*/
+        }
+    };
+
+    public void unRegistRefreshReceiver(){
+        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(refreshReceiver);
+    }
+
+    public void getUnreadMsg(){
+        new QueryUnReadMessageTask(MainActivity.this, new OnTaskFinishedListener<Integer>() {
+            @Override
+            public void onTaskFinished(Integer data) {
+                mBottomBarLayout.setUnread(0,data);
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //activity的getIntent()方法只是获取activity原来的intent。
+        //我们还需要在onNewIntent()方法中重载一下：setIntent(intent);，要不然，接收到的数据依然为空。
+        setIntent(intent);//不能省
+        getUnreadMsg();
+        mBottomBarLayout.getBottomItem(0).callOnClick();//选中消息页
     }
 
     public void initView2(){
@@ -123,45 +152,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mBottomBarLayout.getBottomItem(position).setStatus(true);
                 if (mFragments != null) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.home_container, mFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                            mFragment).commitAllowingStateLoss();
                 }
             }
         });
         //mBottomBarLayout.getBottomItem(1).setStatus(true);
         mBottomBarLayout.getBottomItem(1).callOnClick();//默认选中首页
-    }
-
-    /**
-     * 获取省市级联的省市信息
-     */
-    public void getAreaData() {
-        /*if( Config.loginback == null){
-            Config.loginback.setToken("2FD08ED0-E53B-48B1-B8E6-E6B4290A2770");
-        }*/
-        OkHttpUtils
-                .post()
-                .url(Config.getProviceAndCity)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
-                .build()
-                .execute(
-                        new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
-                                ToastUtil.showNetError();
-                            }
-
-                            @Override
-                            public void onResponse(String response, int id) {
-                                // ToastUtil.showToast(response);
-                                try {
-                                    Config.areaVo = GjsonUtil.parseJsonWithGson(response, AreaVo.class);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                );
     }
 
     @Override
@@ -184,4 +181,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unRegistRefreshReceiver();
+    }
 }

@@ -43,6 +43,15 @@ public class Customer implements Serializable {
     private String   taxNumber;
     private Long  updateTime;
     private Long updater;
+    private String letters;
+
+    public String getLetters() {
+        return letters;
+    }
+
+    public void setLetters(String letters) {
+        this.letters = letters;
+    }
 
     public Long getAssignTime() {
         return assignTime;

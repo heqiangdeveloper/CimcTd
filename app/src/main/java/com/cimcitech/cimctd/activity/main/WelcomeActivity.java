@@ -26,9 +26,6 @@ import com.cimcitech.cimctd.bean.ApkUpdateVo;
 import com.cimcitech.cimctd.utils.ApkUpdateUtil;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.utils.ToastUtil;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

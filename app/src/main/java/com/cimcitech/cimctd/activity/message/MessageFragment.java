@@ -1,74 +1,45 @@
 package com.cimcitech.cimctd.activity.message;
-
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Rect;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.chaychan.library.BottomBarLayout;
 import com.cimcitech.cimctd.R;
-import com.cimcitech.cimctd.activity.home.about.AboutActivity;
-import com.cimcitech.cimctd.activity.home.contact.ContactDetailActivity;
-import com.cimcitech.cimctd.activity.home.file_search.FileSearchActivity;
-import com.cimcitech.cimctd.activity.home.modify_password.ModifyPasswordActivity;
-import com.cimcitech.cimctd.activity.main.LoginActivity;
-import com.cimcitech.cimctd.activity.main.MainActivity;
-import com.cimcitech.cimctd.activity.user.DataCleanManager;
-import com.cimcitech.cimctd.adapter.PopupWindowAdapter;
+import com.cimcitech.cimctd.activity.home.dispatch.DispatchDetailActivity;
 import com.cimcitech.cimctd.adapter.message.MessageAdapter;
 import com.cimcitech.cimctd.adapter.message.MessagePopupWindowAdapter;
-import com.cimcitech.cimctd.bean.ApkUpdateVo;
-import com.cimcitech.cimctd.utils.ApkUpdateUtil;
+import com.cimcitech.cimctd.receiver.MyReceiver;
+import com.cimcitech.cimctd.task.message.QueryMessageTask;
+import com.cimcitech.cimctd.task.message.RemoveMessageTask;
+import com.cimcitech.cimctd.task.message.UpdateMessageOpenedTask;
 import com.cimcitech.cimctd.utils.Config;
-import com.cimcitech.cimctd.utils.GjsonUtil;
-import com.cimcitech.cimctd.utils.ToastUtil;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.jimmy.common.listener.OnTaskFinishedListener;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by cimcitech on 2017/7/31.
@@ -83,64 +54,173 @@ public class MessageFragment extends Fragment {
     TextView message_top_category_Name;
     @Bind(R.id.message_top_category_label)
     TextView message_top_category_Label;
-    /*@Bind(R.id.message_top_item_all_tv)
-    TextView message_top_item_all_Tv;
-    @Bind(R.id.message_top_item_all_label_tv)
-    TextView message_top_item_all_label_Tv;
-    @Bind(R.id.message_top_item_already_tv)
-    TextView message_top_item_already_Tv;
-    @Bind(R.id.message_top_item_already_label_tv)
-    TextView message_top_item_already_label_Tv;
-    @Bind(R.id.message_top_item_no_tv)
-    TextView message_top_item_no_Tv;
-    @Bind(R.id.message_top_item_no_label_tv)
-    TextView message_top_item_no_label_Tv;
-    @Bind(R.id.message_popup_menu_layout)
-    LinearLayout message_popup_menu_Layout;
-    @Bind(R.id.message_top_item_all_rl)
-    RelativeLayout message_top_item_all_Rl;*/
+
     private MessageAdapter adapter;
-    private List<String> data;
+    private List<MessageData> data;
     private PopupWindow pop;
+    private ListView listView;
+
+    private BottomBarLayout mBottomBarLayout;
+    public static final String REFRESH_UNREADMSG_BROADCAST = "com.cimcitech.cimctd" +
+            ".refresh_unreadmsg_broadcast";
+    public static final String KEY_MESSAGE = "content";
+    public static final String KEY_EXTRAS = "title";
+    private IntentFilter myIntentFilter;
+    private Bundle savedInstanceState;
+    private TextView opened_Tv;
+    private TextView remove_Tv;
+    private LinearLayout view2;
+    private AlertDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_message, container, false);
         ButterKnife.bind(this,view);
+        this.savedInstanceState = savedInstanceState;
+        //initDialog();
+        registBroadcastReceiver();
 
-        //message_top_item_all_Rl.callOnClick();
-       // message_popup_menu_Layout.setVisibility(View.GONE);
-        data = new ArrayList<>();
-        data.add("a");
-        data.add("b");
-        data.add("c");
-        data.add("d");
-        data.add("e");
-        data.add("f");
-        data.add("g");
-        data.add("h");
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-        adapter = new MessageAdapter(getActivity(),data);
-        mRecyclerView.setAdapter(adapter);
-
-        //给List添加点击事件
-        adapter.setOnItemClickListener(new MessageAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(),"you clicked: " + data.get(position),Toast
-                        .LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-                //do nothing
-            }
-        });
-
+        data = new ArrayList<MessageData>();
+        Config.type = 0;//初始化时，默认显示“全部”信息
+        getData();
         return view;
     }
 
+    public void registBroadcastReceiver(){
+        myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(MyReceiver.REFRESH_MESSAGE);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver,
+                myIntentFilter);
+    }
+
+    public  void unRegistBroadcastReceiver(){
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals(MyReceiver.REFRESH_MESSAGE)){
+                getData();
+                adapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    public void getData(){
+        new QueryMessageTask(getActivity(), new OnTaskFinishedListener<List<MessageData>>() {
+            @Override
+            public void onTaskFinished(final List<MessageData> datas) {
+                sendRefreshUnReadMsgBroadcast();//更新未读信息数
+                data = datas;
+                final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(layoutManager);
+                adapter = new MessageAdapter(getActivity(),data);
+                mRecyclerView.setAdapter(adapter);
+                //给List添加点击事件
+                adapter.setOnItemClickListener(new MessageAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        MessageData messageData = data.get(position);
+                        int id = messageData.getId();
+                        int opened = messageData.getOpened();
+                        String contractType = messageData.getMessageContent().getContractType();
+                        String planId = messageData.getMessageContent().getPlanId();
+                        changeUnReadMsgAndOpened(id,opened);
+//                        Intent intent = new Intent(getActivity(), DispatchActivity.class);
+                        Intent intent = new Intent(getActivity(), DispatchDetailActivity.class);
+                        intent.putExtra("contractType",contractType);
+                        intent.putExtra("planId",planId);
+                        intent.putExtra("id",id);
+                        getActivity().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        int id = data.get(position).getId();
+                        int opened = data.get(position).getOpened();
+                        showDialog(id,opened);
+                    }
+                });
+                adapter.notifyDataSetChanged();
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void changeUnReadMsgAndOpened(int id,int opened){
+        if(opened == 0){
+            new UpdateMessageOpenedTask(getActivity(), new OnTaskFinishedListener<Boolean>() {
+                @Override
+                public void onTaskFinished(Boolean data) {
+                    if(data){
+                        getData();
+                        sendRefreshUnReadMsgBroadcast();
+                    }
+                }
+            },id,1).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    //通知消息页面和MainActivity的底部tab，更新消息数
+    public void sendRefreshUnReadMsgBroadcast(){
+        Intent intent = new Intent();
+        intent.setAction(MessageFragment.REFRESH_UNREADMSG_BROADCAST);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+    }
+
+    public void showDialog(final int id,final int opened){
+        /*String openedStr = (opened == 0) ? getResources().getString(R.string
+                .message_dialog_is_opend):
+                getResources().getString(R.string.message_dialog_not_opend);
+        opened_Tv.setText(openedStr);*/
+
+        String[] items = new String[2];
+        items[0] = (opened == 0) ? getResources().getString(R.string.message_dialog_is_opend):
+                getResources().getString(R.string.message_dialog_not_opend);
+        items[1] = getResources().getString(R.string.message_dialog_remove);
+
+        new AlertDialog.Builder(getActivity())
+                //.setTitle()
+        .setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0://标为已读/未读
+                        dialog.dismiss();
+                        changeMsgOpened(id,opened);
+                        break;
+                    case 1://移除
+                        dialog.dismiss();
+                        removeMsg(id);
+                        break;
+                }
+            }
+        }).create().show();
+    }
+
+    public void changeMsgOpened(int id,int opened){
+        int mOpened = (opened == 0) ? 1:0;
+        new UpdateMessageOpenedTask(getActivity(), new OnTaskFinishedListener<Boolean>() {
+            @Override
+            public void onTaskFinished(Boolean data) {
+                if(data){
+                    getData();
+                }
+            }
+        },id,mOpened).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void removeMsg(int id){
+        new RemoveMessageTask(getActivity(), new OnTaskFinishedListener<Boolean>() {
+            @Override
+            public void onTaskFinished(Boolean data) {
+                if(data){
+                    getData();
+                }
+            }
+        },id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
     @OnClick({R.id.message_top_area})
     public void onclick(View view) {
@@ -149,34 +229,12 @@ public class MessageFragment extends Fragment {
                 message_top_category_Label.setText(getResources().getString(R.string.
                         message_top_category_label_open));
                 List<String> list = new ArrayList<String>();
-                list.add("全部");
-                list.add("已接收");
-                list.add("未接收");
+                list.add(getActivity().getResources().getString(R.string.message_all));
+                list.add(getActivity().getResources().getString(R.string.message_accept));
+                list.add(getActivity().getResources().getString(R.string.message_no_accept));
                 showContactUsPopWin(getActivity(), "", list);
                 pop.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-                /*if(message_popup_menu_Layout.getVisibility() == View.GONE){//open
-                    message_top_category_Label.setText(getResources().getString(R.string.
-                            message_top_category_label_open));
-                    message_popup_menu_Layout.setVisibility(View.VISIBLE);
-                }else {//close
-                    message_top_category_Label.setText(getResources().getString(R.string
-                            .message_top_category_label_close));
-                    message_popup_menu_Layout.setVisibility(View.GONE);
-                }*/
                 break;
-            /*case R.id.message_top_item_all_rl:
-                //setColorAndVisible(message_top_item_all_Tv,message_top_item_all_label_Tv);
-               // hidePopupWindow(message_top_item_all_Tv);
-                break;
-            case R.id.message_top_item_already_rl:
-                //setColorAndVisible(message_top_item_already_Tv,message_top_item_already_label_Tv);
-                //hidePopupWindow(message_top_item_already_Tv);
-                break;
-            case R.id.message_top_item_no_rl:
-                //setColorAndVisible(message_top_item_no_Tv,message_top_item_no_label_Tv);
-               // hidePopupWindow(message_top_item_no_Tv);
-                break;*/
         }
     }
 
@@ -187,11 +245,9 @@ public class MessageFragment extends Fragment {
         // 创建PopupWindow对象
         pop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, false);
         View pop_reward_view = view.findViewById(R.id.pop_reward_view);
-        TextView name_tv = view.findViewById(R.id.pop_item_name_tv);
-        TextView label_tv = view.findViewById(R.id.pop_item_label_tv);
         String content = message_top_category_Name.getText().toString();
         final MessagePopupWindowAdapter adapter = new MessagePopupWindowAdapter(context, list, content);
-        ListView listView = view.findViewById(R.id.listContent);
+        listView = view.findViewById(R.id.listContent);
         listView.setAdapter(adapter);
         // 需要设置一下此参数，点击外边可消失
         pop.setBackgroundDrawable(new BitmapDrawable());
@@ -214,29 +270,52 @@ public class MessageFragment extends Fragment {
                 message_top_category_Label.setText(getResources().getString(R.string.
                         message_top_category_label_close));
                 pop.dismiss();
+                int index = 0;
+                switch(i){
+                    case 0:
+                        index = 0;
+                        break;
+                    case 1:
+                        index = 1;
+                        break;
+                    case 2:
+                        index = 2;
+                        break;
+                }
+                grepMessages(index);
+
+
             }
         });
     }
 
-    /*public void hidePopupWindow(TextView tv){
-        if(message_popup_menu_Layout.getVisibility() == View.VISIBLE){
-            message_popup_menu_Layout.setVisibility(View.GONE);
-            message_top_category_Label.setText(getResources().getString(R.string
-                    .message_top_category_label_close));
-            message_top_category_Name.setText(tv.getText());
-        }
-    }*/
+    public void grepMessages(final int index){
+        new QueryMessageTask(getActivity(), new OnTaskFinishedListener<List<MessageData>>() {
+            @Override
+            public void onTaskFinished(final List<MessageData> datas) {
+                //sendRefreshUnReadMsgBroadcast();//更新未读信息数
+                data = datas;
+                if(null != data && data.size() != 0){
+                    switch (index){
+                        case 0:
+                            Config.type = 0;
+                            break;
+                        case 1://已接单
+                            Config.type = 1;
+                            break;
+                        case 2://未接单
+                            Config.type = 2;
+                            break;
+                    }
+                    adapter.updateList(data);
+                }
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
-    /*public void setColorAndVisible(String content){
-        message_top_item_all_Tv.setTextColor(getResources().getColor(R.color.black));
-        message_top_item_already_Tv.setTextColor(getResources().getColor(R.color.black));
-        message_top_item_no_Tv.setTextColor(getResources().getColor(R.color.black));
-
-        message_top_item_all_label_Tv.setVisibility(View.INVISIBLE);
-        message_top_item_already_label_Tv.setVisibility(View.INVISIBLE);
-        message_top_item_no_label_Tv.setVisibility(View.INVISIBLE);
-
-        nameTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-        labelTv.setVisibility(View.VISIBLE);
-    }*/
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unRegistBroadcastReceiver();
+    }
 }

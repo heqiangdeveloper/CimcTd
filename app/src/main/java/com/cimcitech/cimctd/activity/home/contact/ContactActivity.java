@@ -24,7 +24,6 @@ import com.cimcitech.cimctd.adapter.contact.ContactAdapter;
 import com.cimcitech.cimctd.bean.contact.Contact;
 import com.cimcitech.cimctd.bean.contact.ContactReq;
 import com.cimcitech.cimctd.bean.contact.ContactVo;
-import com.cimcitech.cimctd.bean.contact.LettersContact;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
 import com.cimcitech.cimctd.utils.ContactPinyinComparator;
@@ -60,7 +59,7 @@ public class ContactActivity extends MyBaseActivity {
     private Handler handler = new Handler();
     private ContactAdapter adapter;
     private ContactVo contactVo;
-    private List<LettersContact> data = new ArrayList<LettersContact>();
+    private List<Contact> data = new ArrayList<Contact>();
     private int pageNum = 1;
     private boolean isLoading;
     private boolean myData = true;
@@ -84,7 +83,7 @@ public class ContactActivity extends MyBaseActivity {
                     initViewData();
                     break;
                 case GET_DATE_FAIL:
-                    mLoading.dismiss();
+                    if(mLoading != null && mLoading.isShowing()) mLoading.dismiss();
                     Toast.makeText(ContactActivity.this,"数据加载失败",Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -162,8 +161,6 @@ public class ContactActivity extends MyBaseActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
-                        ? 0 : recyclerView.getChildAt(0).getTop();
             }
         });
         //给List添加点击事件
@@ -171,8 +168,8 @@ public class ContactActivity extends MyBaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                Intent intent = new Intent(ContactActivity.this, ContactDetailActivity.class);
-                LettersContact lettersContact = (LettersContact) adapter.getAll().get(position);
-                intent.putExtra("LettersContact",lettersContact);
+                Contact contact = (Contact) adapter.getAll().get(position);
+                intent.putExtra("LettersContact",contact);
                 intent.putExtra("isAdd",false);
                 startActivity(intent);
                 //finish();
@@ -185,8 +182,8 @@ public class ContactActivity extends MyBaseActivity {
 
             @Override
             public void onTelClick(View view, int position) {
-                LettersContact lettersContact = (LettersContact) adapter.getAll().get(position);
-                String phoneNum = lettersContact.getTel();
+                Contact contact = (Contact) adapter.getAll().get(position);
+                String phoneNum = contact.getTel();
                 if(null != phoneNum && phoneNum.length() != 0) {
                     Dial(phoneNum);
                 }
@@ -288,15 +285,10 @@ public class ContactActivity extends MyBaseActivity {
                                         if (contactVo.getData().getList() != null && contactVo.getData().getList().size() > 0) {
                                             for (int i = 0; i < contactVo.getData().getList().size(); i++) {
                                                 Contact mContact = contactVo.getData().getList().get(i);
-                                                LettersContact mLettersContact = transferToLettersContact(mContact);
-                                                data.add(setLetters(mLettersContact));
+                                                setLetters(mContact);
+                                                data.add(mContact);
                                             }
                                         }
-                                        /*if (contactVo.getData().isHasNextPage()) {
-                                            adapter.setNotMoreData(false);
-                                        } else {
-                                            adapter.setNotMoreData(true);
-                                        }*/
                                         adapter.setNotMoreData(true);
                                         adapter.notifyDataSetChanged();
                                         adapter.notifyItemRemoved(adapter.getItemCount());
@@ -310,51 +302,18 @@ public class ContactActivity extends MyBaseActivity {
                 );
     }
 
-    public LettersContact transferToLettersContact(Contact mContact){
-        LettersContact mLettersContact = new LettersContact(
-                mContact.getAddr1(),
-                mContact.getAddr2(),
-                mContact.getBirthday(),
-                mContact.getContactId(),
-                mContact.getContactName(),
-                mContact.getCreateName(),
-                mContact.getCreateTime(),
-                mContact.getCreater(),
-                mContact.getCustId(),
-                mContact.getCustName(),
-                mContact.getDeptName(),
-                mContact.getDuties(),
-                mContact.getEmail(),
-                mContact.getFax(),
-                mContact.getHobbies(),
-                mContact.getInternalRela(),
-                mContact.getInternalRelaValue(),
-                mContact.getIsPass(),
-                mContact.getIsState(),
-                mContact.getRelationLevel(),
-                mContact.getRelationLevelValue(),
-                mContact.getRemark(),
-                mContact.getSex(),
-                mContact.getTel(),
-                mContact.getUpdateName(),
-                mContact.getUpdateTime(),
-                mContact.getUpdater()
-        );
-        return mLettersContact;
-    }
-
-    public LettersContact setLetters(LettersContact lettersContact){
+    public Contact setLetters(Contact contact){
         //汉字转换成拼音
-        String pinyin = PinyinUtils.getPingYin(lettersContact.getContactName());
+        String pinyin = PinyinUtils.getPingYin(contact.getContactName());
         String sortString = pinyin.substring(0, 1).toUpperCase();
 
         // 正则表达式，判断首字母是否是英文字母
         if (sortString.matches("[A-Z]")) {
-            lettersContact.setLetters(sortString.toUpperCase());
+            contact.setLetters(sortString.toUpperCase());
         } else {
-            lettersContact.setLetters("#");
+            contact.setLetters("#");
         }
-        return lettersContact;
+        return contact;
     }
 
     /**
@@ -363,21 +322,21 @@ public class ContactActivity extends MyBaseActivity {
      * @param filterStr
      */
     private void filterData(String filterStr) {
-        List<LettersContact> filterDateList = new ArrayList<>();
+        List<Contact> filterDateList = new ArrayList<>();
 
         if (TextUtils.isEmpty(filterStr)) {
             filterDateList = data;
         } else {
             filterDateList.clear();
-            for (LettersContact lettersContact : data) {
-                String name = lettersContact.getContactName();
+            for (Contact contact : data) {
+                String name = contact.getContactName();
                 if (name.indexOf(filterStr.toString()) != -1 ||
                         PinyinUtils.getFirstSpell(name).startsWith(filterStr.toString())
                         //不区分大小写
                         || PinyinUtils.getFirstSpell(name).toLowerCase().startsWith(filterStr.toString())
                         || PinyinUtils.getFirstSpell(name).toUpperCase().startsWith(filterStr.toString())
                         ) {
-                    filterDateList.add(lettersContact);
+                    filterDateList.add(contact);
                 }
             }
         }

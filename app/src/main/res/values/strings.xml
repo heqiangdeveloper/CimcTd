@@ -58,4 +58,9 @@
     <string name="add_location">Add spot</string>
     <string name="select_event_set">Choose events</string>
     <string name="message_title">Message</string>
+    <string name="message_top_category_label_open">∧</string>
+    <string name="message_top_category_label_close">∨</string>
+
+    <string name="message_accept">已接单</string>
+    <string name="message_no_accept">未接单</string>
 </resources>
