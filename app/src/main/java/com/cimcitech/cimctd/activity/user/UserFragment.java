@@ -54,6 +54,7 @@ import java.net.URL;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
@@ -228,6 +229,10 @@ public class UserFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 ModifyUserInfoPreference();//清除登录信息
+                                //关闭推送,并将alias设置为空
+                                JPushInterface.stopPush(getActivity());
+                                JPushInterface.setAlias(getActivity(), "", null);//aliad置空
+
                                 startActivity(new Intent(getActivity(), LoginActivity.class));
                                 getActivity().finish();
                             }
@@ -245,7 +250,7 @@ public class UserFragment extends Fragment {
     public void ModifyUserInfoPreference(){
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("password", "");
-        editor.putString("realName", "");
+        //editor.putString("realName", "");
         editor.putLong("userId",0);
         editor.commit();
     }

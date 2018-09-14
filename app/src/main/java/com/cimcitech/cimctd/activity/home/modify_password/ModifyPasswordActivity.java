@@ -121,7 +121,7 @@ public class ModifyPasswordActivity extends MyBaseActivity {
                     }
                     mLoading.show();
                     //提交至服务器
-                    commitData(Config.userId,new_psd_Tv2.getText().toString().trim());
+                    commitData(Config.USERID,new_psd_Tv2.getText().toString().trim());
                 }
                 break;
         }

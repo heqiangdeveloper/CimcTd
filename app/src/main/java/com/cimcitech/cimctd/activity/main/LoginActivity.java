@@ -28,7 +28,6 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 public class LoginActivity extends MyBaseActivity {
-
     @Bind(R.id.user_name_tv)
     EditText userNameTv;
     @Bind(R.id.password_tv)
@@ -75,7 +74,7 @@ public class LoginActivity extends MyBaseActivity {
                         userNameTv.getText().toString().trim().equals(sp.getString("user_name", ""))){
                     welcome_Tv1.setVisibility(View.VISIBLE);
                     welcome_Tv2.setVisibility(View.VISIBLE);
-                    welcome_Tv1.setText("Hello!  " + sp.getString("user_name", ""));
+                    welcome_Tv1.setText("Hello!  " + sp.getString("realName", ""));
                     welcome_Tv2.setText("欢迎回来");
                 }else{
                     welcome_Tv1.setVisibility(View.INVISIBLE);
@@ -111,17 +110,19 @@ public class LoginActivity extends MyBaseActivity {
             }
         });
 
+        String username = sp.getString("user_name","");
+        String password = sp.getString("password","");
+        String realName = sp.getString("realName","");
+        Long userId = sp.getLong("userId",0);
         //如果是已登录过的，直接跳过登录界面
-        if(sp.getString("user_name","").length() != 0 &&
-                sp.getString("password","").length() != 0 &&
-                sp.getString("realName","").length() != 0 &&
-                sp.getLong("userId",0) != 0){
+        if(username.length() != 0 && password.length()!= 0 && realName.length() != 0 && userId != 0){
+            saveConfigs(username,userId);
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }else{
-            if (sp.getString("user_name", "") != "") {
-                userNameTv.setText(sp.getString("user_name", ""));
+            if (username != "") {
+                userNameTv.setText(username);
             }else{
                 userNameTv.setText("");
             }
@@ -291,6 +292,8 @@ public class LoginActivity extends MyBaseActivity {
             //afterencrypt = encryptByte.toString();
 
             afterencrypt = RSAUtils.encrypt(psw,Config.PUBLIC_KEY);//加密后的密码
+            String s = RSAUtils.decrypt("8C3E82FA37D4AAD40F10C4D6BA75506C",Config.STR_PRI_KEY);
+            Log.d(TAG,"s is :" + s);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this,"rsa 加密失败！！",Toast.LENGTH_SHORT).show();
@@ -315,24 +318,19 @@ public class LoginActivity extends MyBaseActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("heqlogin",response);
                                     try {
                                         loginVo = GjsonUtil.parseJsonWithGson(response, LoginVo.class);
                                         if (loginVo != null) {
                                             Toast.makeText(LoginActivity.this, loginVo.getMsg(), Toast
                                                     .LENGTH_SHORT).show();
                                             if (loginVo.isSuccess()) {
-                                                //Config.isLogin = true;
-                                               // Config.loginback = loginVo.getData();
-                                                saveUserInfo();
-                                                /*Toast.makeText(LoginActivity.this, "登录成功", Toast
-                                                        .LENGTH_SHORT).show();*/
-
-                                                //Config.isLeader = loginVo.getData().getAppAuth()
-                                                //.equals("Y")? true:false;
+                                                String username = userNameTv.getText().toString().trim();
+                                                Long userId = loginVo.getData().getUserId();
+                                                String password = afterencrypt;//加密后的密码
+                                                String realname = loginVo.getData().getRealname();
+                                                saveUserInfo(username,password,realname,userId);
+                                                saveConfigs(username,userId);
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                //String s = loginVo.getData().getAppAuth();
-                                                //intent.putExtra("AppAuth", s);
                                                 startActivity(intent);
                                                 finish();
                                             }
@@ -352,12 +350,18 @@ public class LoginActivity extends MyBaseActivity {
     /***
      * 保存账户与密码
      */
-    private void saveUserInfo() {
+    private void saveUserInfo(String username,String password,String realname,Long userId) {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("user_name", userNameTv.getText().toString().trim());
-        editor.putString("password", afterencrypt);
-        editor.putString("realName", loginVo.getData().getRealname());
-        editor.putLong("userId", loginVo.getData().getUserId());
+        editor.putString("user_name", username);
+        editor.putString("password", password);
+        editor.putString("realName", realname);
+        editor.putLong("userId", userId);
         editor.commit();
+    }
+
+    //保存全局变量
+    private void saveConfigs(String username,Long userId){
+        Config.USERNAME = username;
+        Config.USERID = userId;
     }
 }

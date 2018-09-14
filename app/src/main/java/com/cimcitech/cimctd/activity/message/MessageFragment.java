@@ -21,15 +21,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chaychan.library.BottomBarLayout;
 import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.activity.home.dispatch.DispatchDetailActivity;
-import com.cimcitech.cimctd.adapter.message.MessageAdapter;
+import com.cimcitech.cimctd.adapter.message.Adapter;
 import com.cimcitech.cimctd.adapter.message.MessagePopupWindowAdapter;
 import com.cimcitech.cimctd.receiver.MyReceiver;
 import com.cimcitech.cimctd.task.message.QueryMessageTask;
-import com.cimcitech.cimctd.task.message.RemoveMessageTask;
+import com.cimcitech.cimctd.task.message.RemoveByIdMessageTask;
 import com.cimcitech.cimctd.task.message.UpdateMessageOpenedTask;
 import com.cimcitech.cimctd.utils.Config;
 import com.jimmy.common.listener.OnTaskFinishedListener;
@@ -45,7 +46,7 @@ import butterknife.OnClick;
  * Created by cimcitech on 2017/7/31.
  */
 
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment{
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @Bind(R.id.message_top_area)
@@ -55,22 +56,25 @@ public class MessageFragment extends Fragment {
     @Bind(R.id.message_top_category_label)
     TextView message_top_category_Label;
 
-    private MessageAdapter adapter;
+    private Adapter adapter;
     private List<MessageData> data;
     private PopupWindow pop;
     private ListView listView;
 
     private BottomBarLayout mBottomBarLayout;
-    public static final String REFRESH_UNREADMSG_BROADCAST = "com.cimcitech.cimctd" +
-            ".refresh_unreadmsg_broadcast";
     public static final String KEY_MESSAGE = "content";
     public static final String KEY_EXTRAS = "title";
-    private IntentFilter myIntentFilter;
+    private IntentFilter myIntentFilter1;
+    private IntentFilter myIntentFilter2;
     private Bundle savedInstanceState;
     private TextView opened_Tv;
     private TextView remove_Tv;
     private LinearLayout view2;
     private AlertDialog dialog;
+    private Context mContext;
+
+    public final static String CALL_MAINACTIVITY_REFRESH_COUNT = "com.cimcitech.cimctd.receiver" +
+            "mainactivity.refresh.count";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,40 +90,54 @@ public class MessageFragment extends Fragment {
         return view;
     }
 
+    //最先执行onAttach()
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    public Context getmContext(){
+        return mContext;
+    }
+
     public void registBroadcastReceiver(){
-        myIntentFilter = new IntentFilter();
-        myIntentFilter.addAction(MyReceiver.REFRESH_MESSAGE);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver,
-                myIntentFilter);
+        myIntentFilter1 = new IntentFilter();
+        myIntentFilter1.addAction(DispatchDetailActivity.REFRESH_MESSAGE_STATE);
+        myIntentFilter1.addAction(MyReceiver.NEW_MSG_COMING);
+        LocalBroadcastManager.getInstance(getmContext()).registerReceiver(mBroadcastReceiver,
+                myIntentFilter1);
     }
 
     public  void unRegistBroadcastReceiver(){
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(getmContext()).unregisterReceiver(mBroadcastReceiver);
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals(MyReceiver.REFRESH_MESSAGE)){
-                getData();
-                adapter.notifyDataSetChanged();
-            }
+//            if(action.equals(DispatchDetailActivity.REFRESH_MESSAGE_STATE)){
+//                getData();
+//                adapter.updateList(data);
+//            }
+            getData();
+            adapter.updateList(data);
         }
     };
 
     public void getData(){
-        new QueryMessageTask(getActivity(), new OnTaskFinishedListener<List<MessageData>>() {
+        new QueryMessageTask(getmContext(), new OnTaskFinishedListener<List<MessageData>>() {
             @Override
             public void onTaskFinished(final List<MessageData> datas) {
-                sendRefreshUnReadMsgBroadcast();//更新未读信息数
+                sendRefreshUnReadMsgBroadcast();//通知MainActivity更新未读信息数
                 data = datas;
-                final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                final LinearLayoutManager layoutManager = new LinearLayoutManager(getmContext());
                 mRecyclerView.setLayoutManager(layoutManager);
-                adapter = new MessageAdapter(getActivity(),data);
+                adapter = new Adapter(getmContext(),data);
                 mRecyclerView.setAdapter(adapter);
                 //给List添加点击事件
-                adapter.setOnItemClickListener(new MessageAdapter.OnItemClickListener() {
+                adapter.setOnItemClickListener(new Adapter.IonSlidingViewClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         MessageData messageData = data.get(position);
@@ -128,59 +146,83 @@ public class MessageFragment extends Fragment {
                         String contractType = messageData.getMessageContent().getContractType();
                         String planId = messageData.getMessageContent().getPlanId();
                         changeUnReadMsgAndOpened(id,opened);
-//                        Intent intent = new Intent(getActivity(), DispatchActivity.class);
-                        Intent intent = new Intent(getActivity(), DispatchDetailActivity.class);
+                        Intent intent = new Intent(getmContext(), DispatchDetailActivity.class);
                         intent.putExtra("contractType",contractType);
                         intent.putExtra("planId",planId);
                         intent.putExtra("id",id);
-                        getActivity().startActivity(intent);
+                        getmContext().startActivity(intent);
                     }
 
+                    //设置已读/未读
                     @Override
-                    public void onItemLongClick(View view, int position) {
+                    public void onSetBtnCilck(View view, int position) {
                         int id = data.get(position).getId();
                         int opened = data.get(position).getOpened();
-                        showDialog(id,opened);
+                        changeMsgOpened(id,opened);
+                    }
+
+                    //删除消息
+                    @Override
+                    public void onDeleteBtnCilck(View view,final int position,final boolean isAccept) {
+                        new AlertDialog.Builder(getmContext())
+                                .setTitle("提示")
+                                .setMessage("您确定要删除吗？")
+                                .setCancelable(false)
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        int id = data.get(position).getId();
+                                        if(!isAccept){//未接单，不能删除
+                                            Toast.makeText(getmContext(),"未接单的消息，不能删除！",Toast.LENGTH_SHORT).show();
+                                        }else{//已接单，可以删除
+                                            removeMsg(id);
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).create().show();
                     }
                 });
-                adapter.notifyDataSetChanged();
+                adapter.updateList(data);
             }
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void changeUnReadMsgAndOpened(int id,int opened){
         if(opened == 0){
-            new UpdateMessageOpenedTask(getActivity(), new OnTaskFinishedListener<Boolean>() {
+            new UpdateMessageOpenedTask(getmContext(), new OnTaskFinishedListener<Boolean>() {
                 @Override
                 public void onTaskFinished(Boolean data) {
                     if(data){
                         getData();
-                        sendRefreshUnReadMsgBroadcast();
+                        //sendRefreshUnReadMsgBroadcast();
                     }
                 }
             },id,1).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
-    //通知消息页面和MainActivity的底部tab，更新消息数
+    //通知MainActivity的底部tab，更新消息数
     public void sendRefreshUnReadMsgBroadcast(){
         Intent intent = new Intent();
-        intent.setAction(MessageFragment.REFRESH_UNREADMSG_BROADCAST);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        //这里不能再通知MessageFragment进行更新，否则会造成死循环，不停地发消息。
+        //当从消息详情页面跳转回来后，MessageFragment会重新onCreate(),重新读取消息的状态
+        intent.setAction(CALL_MAINACTIVITY_REFRESH_COUNT);
+        LocalBroadcastManager.getInstance(getmContext()).sendBroadcast(intent);
     }
 
     public void showDialog(final int id,final int opened){
-        /*String openedStr = (opened == 0) ? getResources().getString(R.string
-                .message_dialog_is_opend):
-                getResources().getString(R.string.message_dialog_not_opend);
-        opened_Tv.setText(openedStr);*/
-
         String[] items = new String[2];
         items[0] = (opened == 0) ? getResources().getString(R.string.message_dialog_is_opend):
                 getResources().getString(R.string.message_dialog_not_opend);
         items[1] = getResources().getString(R.string.message_dialog_remove);
 
-        new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(getmContext())
                 //.setTitle()
         .setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -201,7 +243,7 @@ public class MessageFragment extends Fragment {
 
     public void changeMsgOpened(int id,int opened){
         int mOpened = (opened == 0) ? 1:0;
-        new UpdateMessageOpenedTask(getActivity(), new OnTaskFinishedListener<Boolean>() {
+        new UpdateMessageOpenedTask(getmContext(), new OnTaskFinishedListener<Boolean>() {
             @Override
             public void onTaskFinished(Boolean data) {
                 if(data){
@@ -212,7 +254,7 @@ public class MessageFragment extends Fragment {
     }
 
     public void removeMsg(int id){
-        new RemoveMessageTask(getActivity(), new OnTaskFinishedListener<Boolean>() {
+        new RemoveByIdMessageTask(getmContext(), new OnTaskFinishedListener<Boolean>() {
             @Override
             public void onTaskFinished(Boolean data) {
                 if(data){
@@ -229,10 +271,10 @@ public class MessageFragment extends Fragment {
                 message_top_category_Label.setText(getResources().getString(R.string.
                         message_top_category_label_open));
                 List<String> list = new ArrayList<String>();
-                list.add(getActivity().getResources().getString(R.string.message_all));
-                list.add(getActivity().getResources().getString(R.string.message_accept));
-                list.add(getActivity().getResources().getString(R.string.message_no_accept));
-                showContactUsPopWin(getActivity(), "", list);
+                list.add(getmContext().getResources().getString(R.string.message_all));
+                list.add(getmContext().getResources().getString(R.string.message_accept));
+                list.add(getmContext().getResources().getString(R.string.message_no_accept));
+                showContactUsPopWin(getmContext(), "", list);
                 pop.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
         }
@@ -283,14 +325,12 @@ public class MessageFragment extends Fragment {
                         break;
                 }
                 grepMessages(index);
-
-
             }
         });
     }
 
     public void grepMessages(final int index){
-        new QueryMessageTask(getActivity(), new OnTaskFinishedListener<List<MessageData>>() {
+        new QueryMessageTask(getmContext(), new OnTaskFinishedListener<List<MessageData>>() {
             @Override
             public void onTaskFinished(final List<MessageData> datas) {
                 //sendRefreshUnReadMsgBroadcast();//更新未读信息数

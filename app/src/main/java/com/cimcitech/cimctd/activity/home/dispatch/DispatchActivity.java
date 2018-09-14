@@ -236,8 +236,12 @@ public class DispatchActivity extends MyBaseActivity {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(DispatchActivity.this, DispatchDetailActivity.class);
                 Dispatch dispatch = (Dispatch) adapter.getAll().get(position);
+                if(isSale){
+                    dispatch.setContractType("0");
+                }else{
+                    dispatch.setContractType("1");
+                }
                 intent.putExtra("dispatch",dispatch);
-                intent.putExtra("isSale",isSale);
                 startActivity(intent);
                 finish();
             }
@@ -280,7 +284,6 @@ public class DispatchActivity extends MyBaseActivity {
                             @Override
                             public void onResponse(String response, int id) {
                                 if(mLoading.isShowing()) mLoading.dismiss();
-                                data.clear();
                                 dispatchVo = GjsonUtil.parseJsonWithGson(response, DispatchVo.class);
                                 if (dispatchVo != null) {
                                     if (dispatchVo.isSuccess()) {

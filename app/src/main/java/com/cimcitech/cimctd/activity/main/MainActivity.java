@@ -24,6 +24,7 @@ import com.cimcitech.cimctd.R;
 import com.cimcitech.cimctd.activity.message.MessageData;
 import com.cimcitech.cimctd.activity.message.MessageFragment;
 import com.cimcitech.cimctd.bean.AreaVo;
+import com.cimcitech.cimctd.receiver.MyReceiver;
 import com.cimcitech.cimctd.task.message.QueryUnReadMessageTask;
 import com.cimcitech.cimctd.utils.Config;
 import com.cimcitech.cimctd.utils.GjsonUtil;
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private long firstTime = 0;
 
     private BottomBarLayout mBottomBarLayout;
-    public static final String MESSAGE_RECEIVED_ACTION = "com.cimcitech.cimctd.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
     public int unReadMsg  = 0;
@@ -78,35 +78,40 @@ public class MainActivity extends AppCompatActivity {
         mBottomBarLayout.setMsg(3,"NEW");
 
         //设置极光推送
-        //初始化sdk
+        //初始化sdk，如果推送已被关闭，就恢复推送服务
+        if(JPushInterface.isPushStopped(MainActivity.this)){
+            JPushInterface.resumePush(MainActivity.this);
+        }
         JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试
         JPushInterface.init(this);
         //建议添加tag标签，发送消息的之后就可以指定tag标签来发送了
-        Set<String> set = new HashSet<>();
-        set.add("xiaomi");//名字任意，可多添加几个
-        set.add("alcatel");
-        set.add("huawei");
-        JPushInterface.setTags(this, set, null);//设置标签
+        Set<String> setTags = new HashSet<>();
+        setTags.add("debug");//名字任意，可多添加几个
+        JPushInterface.setTags(this, setTags, null);//设置标签
+        JPushInterface.setAlias(this, String.valueOf(Config.USERID), null);
 
         String content = getIntent().getStringExtra("content");
         if (null != content && !content.equals("")){
             mBottomBarLayout.getBottomItem(0).callOnClick();//选中消息页
         }
         registRefreshReceiver();
+        Log.d("aliaslog","alias is: " + Config.USERID);
     }
 
     public void registRefreshReceiver(){
         filter = new IntentFilter();
-        filter.addAction(MessageFragment.REFRESH_UNREADMSG_BROADCAST);
+        filter.addAction(MyReceiver.NEW_MSG_COMING);
+        filter.addAction(MessageFragment.CALL_MAINACTIVITY_REFRESH_COUNT);
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(refreshReceiver,filter);
     }
 
     public BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(MessageFragment.REFRESH_UNREADMSG_BROADCAST)){
-                getUnreadMsg();
-            }
+//            if(intent.getAction().equals(MyReceiver.NEW_MSG_COMING)){
+//                getUnreadMsg();
+//            }
+            getUnreadMsg();
         }
     };
 

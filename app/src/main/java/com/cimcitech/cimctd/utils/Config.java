@@ -12,18 +12,15 @@ import com.jimmy.common.bean.Schedule;
  */
 
 public class Config {
+    public static String USERNAME = "";
 
-    public static  boolean isLeader = false;
+    public static Long USERID = 0L;
 
     public static boolean isLogin = false;
 
     public static Loginback loginback;
 
-    public static AreaVo areaVo;
-
     public static String KEY_LOGIN_AUTO = "key_login_auto";
-
-    public static boolean isOnCreated = true;
 
     public static Schedule scheduleConfig = null;
 

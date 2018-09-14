@@ -99,11 +99,12 @@ public class DispatchDetailActivity extends MyBaseActivity {
     private Handler handler = new Handler();
     private String TAG = "dispatchlog";
     private Dispatch dispatch = null;
-    private boolean isSale = true;
     private String contractType = "";
     private String planId = "";
     private int id = -2;
     private SharedPreferences sp;
+    public static final String REFRESH_MESSAGE_STATE = "com.cimcitech.cimctd.receiver.refresh" +
+            ".message.state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +114,6 @@ public class DispatchDetailActivity extends MyBaseActivity {
         setTitle();
         sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
 
-        //由“区域经理派工”页面跳转而来
-        dispatch = (Dispatch) getIntent().getSerializableExtra("dispatch");
-        isSale = getIntent().getBooleanExtra("isSale",true);
-
         //由消息页面跳转而来
         contractType = getIntent().getStringExtra("contractType");//若不是，则等号右边的值为null
         planId = getIntent().getStringExtra("planId");
@@ -125,7 +122,8 @@ public class DispatchDetailActivity extends MyBaseActivity {
         if(null != contractType && null != planId){//由消息页面跳转而来
             mLoading.show();
             getData();
-        }else{
+        }else{//由“区域经理派工”页面跳转而来
+            dispatch = (Dispatch) getIntent().getSerializableExtra("dispatch");
             initView();
         }
     }
@@ -139,7 +137,7 @@ public class DispatchDetailActivity extends MyBaseActivity {
         String json = "";
         String url = "";
         if(contractType.equals("0")){//销售类合同
-            //查询    已派工  +  未接收
+            //查询    已派工  +  已/未接收
             json = new Gson().toJson(new SaleDispatchReq(pageNum,10, null,
                     new saleMaintenPlanVo("isSend",
                             "all",
@@ -148,11 +146,11 @@ public class DispatchDetailActivity extends MyBaseActivity {
                             null,
                             null,
                             null,
-                            sp.getLong("userId",0))));
+                            Config.USERID)));
             url = Config.QUERY_DISPATCH_SALE_URL;
         }else{//维保类合同
-            //查询    已派工  +  未接收
-            json = new Gson().toJson(new MainDispatchReq(pageNum, 10, "createTime desc",
+            //查询    已派工  +  已/未接收
+            json = new Gson().toJson(new MainDispatchReq(pageNum, 10, null,
                     new MaintenancePlanVo("isSend",
                             "all",
                             "all",
@@ -160,7 +158,7 @@ public class DispatchDetailActivity extends MyBaseActivity {
                             null,
                             null,
                             null,
-                            sp.getLong("userId",0))));
+                            Config.USERID)));
             url = Config.QUERY_DISPATCH_MAIN_URL;
         }
 
@@ -194,9 +192,12 @@ public class DispatchDetailActivity extends MyBaseActivity {
                                 }
 
                                 //过滤出当前的派工单
+                                int mPlanId = Integer.parseInt(planId);
+                                int nPlanId = 0;
                                 if(null != data && data.size() != 0){
                                     for(int n = 0 ; n < data.size(); n++){
-                                        if(Integer.parseInt(planId) == data.get(n).getPlanId()){
+                                        nPlanId = data.get(n).getPlanId();
+                                        if( mPlanId== nPlanId){
                                             dispatch = data.get(n);
                                             dispatch.setContractType(contractType);
                                             break;
@@ -204,6 +205,11 @@ public class DispatchDetailActivity extends MyBaseActivity {
                                     }
                                 }
 
+                                if(null == dispatch){
+                                    Toast.makeText(DispatchDetailActivity.this,"没有对应的信息",Toast
+                                            .LENGTH_SHORT).show();
+                                    finish();
+                                }
                                 initView();
                             }
                         }
@@ -296,9 +302,11 @@ public class DispatchDetailActivity extends MyBaseActivity {
 
     public void confirmPlan(){//确认接收派工单
         int planId = dispatch.getPlanId();
+        String url = dispatch.getContractType().equals("0") ? Config.SALE_CONFIRM_PLAN_URL:Config
+                .MAIN_CONFIRM_PLAN_URL;
         OkHttpUtils
                 .post()
-                .url(isSale?Config.SALE_CONFIRM_PLAN_URL:Config.MAIN_CONFIRM_PLAN_URL)
+                .url(url)
                 .addParams("planId",planId + "")
                 //.addHeader("checkTokenKey", Config.loginback.getToken())
                 //.addHeader("sessionKey", Config.loginback.getUserId() + "")
@@ -350,7 +358,7 @@ public class DispatchDetailActivity extends MyBaseActivity {
     //通知消息页面，更新该派工单的接收状态
     public void sendRefreshAcceptBroadcast(){
         Intent intent = new Intent();
-        intent.setAction(MyReceiver.REFRESH_MESSAGE);
+        intent.setAction(DispatchDetailActivity.REFRESH_MESSAGE_STATE);
         LocalBroadcastManager.getInstance(DispatchDetailActivity.this).sendBroadcast(intent);
     }
 }
